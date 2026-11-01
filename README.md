@@ -60,10 +60,6 @@ touch over USB) and run, as the user Klipper runs as:
 curl -fsSL https://raw.githubusercontent.com/wsalata/klip-boy/main/install.sh | bash
 ```
 
-The panel used to be called **Klipper Helm**. The installer stops if the old one is installed and
-prints the command that removes it (`install.sh --uninstall` of v0.6.0); its settings
-(`klipper-helm.toml`, `klipper-helm.env`) are copied to `klip-boy.toml` and `klip-boy.env`.
-
 The installer:
 
 - downloads the latest release for the system (`klip-boy-linux-arm64`, `-armhf` or `-amd64`) into

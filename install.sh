@@ -216,21 +216,6 @@ amd64 | x86_64) ASSET=klip-boy-linux-amd64 ;;
 *) die "Unsupported system architecture: $(uname -m)" ;;
 esac
 
-# Renamed from Klipper Helm: the old install must go first (its service, update section, boot
-# splash), with the old installer that knows its names
-if [ -e /etc/systemd/system/klipper-helm.service ]; then
-	die "Klipper Helm (the old name of this panel) is installed. Remove it first:
-  curl -fsSL https://raw.githubusercontent.com/$REPO/v0.6.0/install.sh | bash -s -- --uninstall
-then run this installer again; the panel settings are kept."
-fi
-# Its settings carry over
-for ext in toml env; do
-	if [ -e "$CONFIG_DIR/klipper-helm.$ext" ] && [ ! -e "$CONFIG_DIR/klip-boy.$ext" ]; then
-		cp "$CONFIG_DIR/klipper-helm.$ext" "$CONFIG_DIR/klip-boy.$ext"
-		say "Settings copied from klipper-helm.$ext"
-	fi
-done
-
 # Moonraker refuses to update an application that lives inside a git repository
 if [ -d "$DIR/.git" ]; then
 	die "$DIR is a git repository (the source code?). Move it away and run the installer again."
