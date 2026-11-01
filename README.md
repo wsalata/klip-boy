@@ -8,7 +8,8 @@ On a Raspberry Pi it draws directly through KMS/DRM (no X11/Wayland); on a PC it
 - **Home**: built to be read from across the room. The remaining time and end time dominate, next to the
   print thumbnail and progress; nozzle, bed and fan chips open their controls. **Tune** adjusts speed, flow,
   Z offset and the part fan during a print. When idle or finished it shows the state and print time.
-- **Menu** (a button on Home, and in the header elsewhere) opens every other screen as large tiles:
+- **Tabs** along the bottom group the screens (Status, Control, Files, Calibration, System); the screens
+  of the current tab are listed down the left side:
 - **Temperature**: all heaters and sensors, setting targets with a numeric keypad, presets
 - **Move**: jogging with a selectable step, homing, motors off
 - **Filament**: extrude and retract, fan control
@@ -19,7 +20,7 @@ On a Raspberry Pi it draws directly through KMS/DRM (no X11/Wayland); on a PC it
   (Ethernet DHCP or static address, Wi-Fi scanning and joining, through NetworkManager) and
   **Updates** (Moonraker's update manager: Klipper, Moonraker, Mainsail, the panel itself and the
   system packages, as in Mainsail)
-- **Calibration** (own menu entry): Z offset (probe/BLTouch paper test, or the Z endstop), the bed mesh
+- **Calibration** (own tab): Z offset (probe/BLTouch paper test, or the Z endstop), the bed mesh
   (height map, calibration, profiles) and bed levelling (bed screws measured with the probe or
   adjusted by the paper test, Z tilt, quad gantry level), heater PID tuning and the extruder's
   `rotation_distance` (mark the filament, extrude 100 mm, enter what is left). Klipper's `SAVE_CONFIG`
@@ -85,8 +86,8 @@ It installs Plymouth with the theme from [packaging/plymouth](packaging/plymouth
 initramfs, together with corrected screen EDIDs from `/lib/firmware/edid` if there are any), adds `disable_splash=1` to `config.txt`, and in `cmdline.txt` moves the console to `tty3` and
 adds `quiet splash loglevel=3 logo.nologo vt.global_cursor_default=0 plymouth.ignore-serial-consoles`.
 Both files are backed up first (`*.klipper-helm.bak`); `--uninstall` undoes exactly these changes. The
-logo is rendered from the panel itself by `packaging/plymouth/make-logo.sh`; run it again if the welcome
-screen changes.
+splash image `packaging/plymouth/logo.png` is a copy of the panel's start-up picture
+`ui/icons/standby.png`, placed where the panel draws it; replace both together.
 
 The panel draws through DRM/KMS without X11 or Wayland: HDMI and DSI screens work, as do SPI screens with
 a DRM driver (e.g. `panel-mipi-dbi`); SPI screens with only an `fbtft` framebuffer driver do not.
@@ -222,7 +223,16 @@ Settings are stored in `~/.config/klipper-helm/config.toml`, or the file given b
 
 ## Look and fonts
 
-The UI follows one style ("at a glance"): a deep navy ground, a teal accent and the Saira typeface.
+The UI looks like a retro-futuristic wrist computer: green phosphor on a black screen with scanlines,
+square frames and the monospaced Martian Mono Condensed typeface. The current group's name sits on the
+top line, with readouts of the printer state, temperatures and the time hanging below it; the group's
+screens are listed down the left side and the groups are tabs on the bottom line. File
+thumbnails and the bed mesh are drawn in the same green; amber marks heat and warnings, red is kept
+for danger and the emergency stop.
+
+While the panel connects to Moonraker at start-up it shows "Please stand by"
+(`ui/icons/standby.png`), as does the boot splash.
+
 The fonts are compiled into the binary from `ui/fonts/` (SIL Open Font License, `ui/fonts/OFL.txt`),
 so the Pi needs no extra font packages; colors and sizes live in `ui/theme.slint`.
 

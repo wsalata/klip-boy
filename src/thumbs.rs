@@ -108,7 +108,22 @@ fn download(agent: &ureq::Agent, url: &str) -> anyhow::Result<Pixels> {
         .with_config()
         .limit(MAX_BYTES)
         .read_to_vec()?;
-    decode_png(&bytes)
+    decode_png(&bytes).map(phosphor)
+}
+
+/// Redraws a thumbnail in the panel's green (Theme.text, #0FBB6B) by brightness, as a monochrome
+/// screen would show it. Brightness is stretched so dark models (e.g. blue filament) stay visible.
+fn phosphor(mut pixels: Pixels) -> Pixels {
+    let luma = |p: &Rgba8Pixel| (u32::from(p.r) * 299 + u32::from(p.g) * 587 + u32::from(p.b) * 114) / 1000;
+    let px = pixels.make_mut_slice();
+    let brightest = px.iter().filter(|p| p.a > 0).map(luma).max().unwrap_or(0).max(1);
+    for p in px.iter_mut() {
+        // 25..100 % of full green, so the darkest parts are still lit
+        let level = 64 + luma(p) * 191 / brightest;
+        let tint = |c: u32| (c * level / 255) as u8;
+        *p = Rgba8Pixel { r: tint(0x0F), g: tint(0xBB), b: tint(0x6B), a: p.a };
+    }
+    pixels
 }
 
 pub fn decode_png(bytes: &[u8]) -> anyhow::Result<Pixels> {
@@ -125,17 +140,17 @@ pub fn decode_png(bytes: &[u8]) -> anyhow::Result<Pixels> {
     let rgba = |r, g, b, a| Rgba8Pixel { r, g, b, a };
     match info.color_type {
         png::ColorType::Rgba => {
-            for (p, c) in px.iter_mut().zip(data.chunks_exact(4)) {
+            for (p, c) in px.iter_mut().zip(data.as_chunks::<4>().0) {
                 *p = rgba(c[0], c[1], c[2], c[3]);
             }
         }
         png::ColorType::Rgb => {
-            for (p, c) in px.iter_mut().zip(data.chunks_exact(3)) {
+            for (p, c) in px.iter_mut().zip(data.as_chunks::<3>().0) {
                 *p = rgba(c[0], c[1], c[2], 255);
             }
         }
         png::ColorType::GrayscaleAlpha => {
-            for (p, c) in px.iter_mut().zip(data.chunks_exact(2)) {
+            for (p, c) in px.iter_mut().zip(data.as_chunks::<2>().0) {
                 *p = rgba(c[0], c[0], c[0], c[1]);
             }
         }

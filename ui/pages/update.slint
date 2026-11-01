@@ -10,6 +10,8 @@ component UpdateRow inherits Rectangle {
 
     HorizontalLayout {
         padding-left: 4px;
+        // Room for the scroll bar on the right
+        padding-right: 16px;
         spacing: 10px;
         VerticalLayout {
             alignment: center;
@@ -35,13 +37,18 @@ component UpdateRow inherits Rectangle {
                 overflow: elide;
             }
         }
-        if root.item.state == "available": Btn {
-            width: 140px;
-            text: @tr("Update");
-            font-size: Theme.font-s;
-            kind: BtnKind.accent;
-            enabled: root.can-update;
-            clicked => { Update.upgrade(root.item.name); }
+        // Inset from the row's edges, so the key stays clear of the separator lines
+        if root.item.state == "available": VerticalLayout {
+            alignment: center;
+            Btn {
+                width: 140px;
+                height: 44px;
+                text: @tr("Update");
+                font-size: Theme.font-s;
+                kind: BtnKind.accent;
+                enabled: root.can-update;
+                clicked => { Update.upgrade(root.item.name); }
+            }
         }
     }
     Rectangle {
@@ -73,12 +80,12 @@ export component UpdatePage inherits Rectangle {
                         Text {
                             text: Update.error != "" ? Update.error
                                 : Update.busy ? (Update.message != "" ? Update.message : @tr("Working..."))
-                                : Printer.printing ? @tr("Updates are not possible while printing.")
+                                : Printer.printing ? @tr("Not available while printing")
                                 : !Update.loaded ? @tr("Moonraker's update manager is not available.")
                                 : "";
                             color: Update.error != "" ? Theme.danger-text : Theme.text-dim;
                             font-size: Theme.font-s;
-                            overflow: elide;
+                            wrap: word-wrap;
                         }
                     }
                     Btn {
@@ -93,6 +100,7 @@ export component UpdatePage inherits Rectangle {
                         width: 160px;
                         text: @tr("Update all");
                         font-size: Theme.font-s;
+                        wrap: true;
                         enabled: root.can-update;
                         clicked => { Overlay.ask(@tr("Update everything? Klipper and Moonraker restart during the update."), "update", ""); }
                     }

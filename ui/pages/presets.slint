@@ -1,0 +1,78 @@
+import { Theme } from "../theme.slint";
+import { Overlay, Settings, Preset } from "../state.slint";
+import { Btn, BtnKind, Card, Caption } from "../widgets.slint";
+import { ScrollView } from "std-widgets.slint";
+import { SaveBar } from "settings.slint";
+
+// Fixed widths for the temperatures, so the columns line up whatever the values; the name takes
+// the rest. Room on the right for the scroll bar.
+component PresetRow inherits HorizontalLayout {
+    in property <Preset> preset;
+    in property <int> index;
+    spacing: 6px;
+    padding-right: 16px;
+    height: 48px;
+    Btn {
+        text: root.preset.name;
+        font-size: Theme.font-s;
+        horizontal-stretch: 1;
+        clicked => { Overlay.ask-text("name:" + root.index, @tr("Preset name"), root.preset.name); }
+    }
+    Btn {
+        text: round(root.preset.extruder) + "°";
+        font-size: Theme.font-s;
+        width: 120px;
+        clicked => { Overlay.ask-number("ext:" + root.index, @tr("{} - nozzle", root.preset.name), root.preset.extruder, "°"); }
+    }
+    Btn {
+        text: round(root.preset.bed) + "°";
+        font-size: Theme.font-s;
+        width: 120px;
+        clicked => { Overlay.ask-number("bed:" + root.index, @tr("{} - bed", root.preset.name), root.preset.bed, "°"); }
+    }
+    Btn {
+        text: "X";
+        kind: BtnKind.ghost;
+        font-size: Theme.font-s;
+        width: 48px;
+        clicked => { Settings.preset-remove(root.index); }
+    }
+}
+
+// Temperature presets, saved with the panel settings.
+export component PresetsPage inherits Rectangle {
+    VerticalLayout {
+        padding: Theme.gap;
+        spacing: Theme.gap;
+
+        SaveBar {}
+
+        Card {
+            vertical-stretch: 1;
+            VerticalLayout {
+                padding: 12px;
+                spacing: 8px;
+                HorizontalLayout {
+                    spacing: 6px;
+                    padding-right: 16px;
+                    Caption { text: @tr("Presets (name, nozzle, bed)"); horizontal-stretch: 1; }
+                    Btn {
+                        text: @tr("+ Add");
+                        font-size: Theme.font-s;
+                        min-height: 40px;
+                        width: 100px;
+                        clicked => { Settings.preset-add(@tr("New")); }
+                    }
+                }
+                ScrollView {
+                    vertical-stretch: 1;
+                    VerticalLayout {
+                        alignment: start;
+                        spacing: 6px;
+                        for p[i] in Settings.presets: PresetRow { preset: p; index: i; }
+                    }
+                }
+            }
+        }
+    }
+}

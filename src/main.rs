@@ -228,32 +228,12 @@ fn wire_actions(ui: &AppWindow, tx: &UnboundedSender<Command>) {
 
 /// Debug builds only: steps through the views (screens, dialogs), saves each one
 /// as `page-N.ppm` in the given directory and quits.
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn scale_from_mode() {
-        assert_eq!(super::scale_for(1024, 600), 1.25);
-        assert_eq!(super::scale_for(1280, 720), 1.5);
-        assert_eq!(super::scale_for(800, 480), 1.0);
-        assert_eq!(super::scale_for(1024, 768), 1.28);
-        assert_eq!(super::scale_for(640, 480), 1.0);
-    }
-
-    #[test]
-    fn screen_size() {
-        assert_eq!(super::parse_screen("1024x600"), Some((1024, 600)));
-        assert_eq!(super::parse_screen(" 800 X 480 "), Some((800, 480)));
-        assert_eq!(super::parse_screen("800"), None);
-        assert_eq!(super::parse_screen("wide"), None);
-    }
-}
-
 #[cfg(debug_assertions)]
 fn snapshot_pages(ui: &AppWindow, dir: String) -> Timer {
     use slint::Model;
     type Step = Box<dyn Fn(&AppWindow)>;
     let page = |n: i32| -> Step { Box::new(move |ui| ui.global::<Nav>().set_page(n)) };
-    let mut steps: Vec<Step> = (0..8).chain([11, 12, 13, 16]).map(page).collect();
+    let mut steps: Vec<Step> = (0..8).chain([11, 12, 14, 15, 16]).map(page).collect();
     steps.push(Box::new(|ui| {
         if let Some(file) = ui.global::<Printer>().get_files().row_data(0) {
             ui.global::<Nav>().set_page(4);
@@ -264,10 +244,6 @@ fn snapshot_pages(ui: &AppWindow, dir: String) -> Timer {
     steps.push(Box::new(|ui| {
         ui.global::<Overlay>().set_file_open(false);
         ui.global::<Nav>().set_page(0);
-        ui.global::<Overlay>().set_menu_open(true);
-    }));
-    steps.push(Box::new(|ui| {
-        ui.global::<Overlay>().set_menu_open(false);
         ui.global::<Overlay>().set_tune_open(true);
     }));
     steps.push(Box::new(|ui| {
@@ -275,6 +251,7 @@ fn snapshot_pages(ui: &AppWindow, dir: String) -> Timer {
         ui.global::<Settings>().invoke_load();
         ui.global::<Nav>().set_page(8);
     }));
+    steps.push(Box::new(|ui| ui.global::<Nav>().set_page(17)));
     steps.push(Box::new(|ui| {
         ui.global::<Network>().invoke_load();
         ui.global::<Nav>().set_page(9);
@@ -324,4 +301,24 @@ fn snapshot_pages(ui: &AppWindow, dir: String) -> Timer {
         step += 1;
     });
     timer
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn scale_from_mode() {
+        assert_eq!(super::scale_for(1024, 600), 1.25);
+        assert_eq!(super::scale_for(1280, 720), 1.5);
+        assert_eq!(super::scale_for(800, 480), 1.0);
+        assert_eq!(super::scale_for(1024, 768), 1.28);
+        assert_eq!(super::scale_for(640, 480), 1.0);
+    }
+
+    #[test]
+    fn screen_size() {
+        assert_eq!(super::parse_screen("1024x600"), Some((1024, 600)));
+        assert_eq!(super::parse_screen(" 800 X 480 "), Some((800, 480)));
+        assert_eq!(super::parse_screen("800"), None);
+        assert_eq!(super::parse_screen("wide"), None);
+    }
 }

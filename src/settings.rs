@@ -3,7 +3,7 @@
 
 use crate::config::{self, Config};
 use crate::moonraker::Command;
-use crate::{AppWindow, Messages, Nav, Preset, Printer, Settings, bridge};
+use crate::{AppWindow, Messages, Preset, Printer, Settings, bridge};
 use slint::{ComponentHandle, Model, ModelRc, VecModel};
 use std::cell::RefCell;
 use std::rc::Rc;
@@ -139,7 +139,6 @@ pub fn wire(ui: &AppWindow, cfg: Rc<RefCell<Config>>, tx: UnboundedSender<Comman
         *cfg.borrow_mut() = new;
 
         set_error(&s, "", "");
-        ui.global::<Nav>().set_page(7);
         ui.global::<Messages>().invoke_settings_saved();
     });
 }

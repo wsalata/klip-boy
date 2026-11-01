@@ -1,4 +1,7 @@
-Copyright 2020 The Saira Project Authors (https://github.com/Omnibus-Type/Saira)
+Copyright 2021 The Martian Mono Project Authors (https://github.com/evilmartians/mono)
+
+Martian Mono Condensed Regular, SemiBold and Bold are static instances (width 75) of the
+Martian Mono variable font.
 
 
 This Font Software is licensed under the SIL Open Font License, Version 1.1.

@@ -190,11 +190,12 @@ pub struct MeshData {
     pub profiles: Vec<MeshProfile>,
 }
 
-/// Blue below zero, teal at zero, orange above; `t` is -1..1.
+/// In the panel's phosphor colours: dim green below zero, bright green at zero, amber above;
+/// `t` is -1..1.
 fn mesh_color(t: f64) -> slint::Color {
-    const LOW: [f64; 3] = [77.0, 141.0, 255.0];
-    const MID: [f64; 3] = [46.0, 196.0, 182.0];
-    const HIGH: [f64; 3] = [255.0, 138.0, 61.0];
+    const LOW: [f64; 3] = [12.0, 100.0, 58.0];
+    const MID: [f64; 3] = [15.0, 187.0, 107.0];
+    const HIGH: [f64; 3] = [255.0, 177.0, 61.0];
     let t = t.clamp(-1.0, 1.0);
     let (to, k) = if t < 0.0 { (LOW, -t) } else { (HIGH, t) };
     let c = |i: usize| (MID[i] + (to[i] - MID[i]) * k).round() as u8;
@@ -759,12 +760,14 @@ mod tests {
 
     #[test]
     fn calibrate_z() {
-        let mut m = PrinterModel::default();
-        m.status = json!({ "toolhead": {
-            "homed_axes": "",
-            "axis_minimum": [0.0, -5.0, 0.0, 0.0],
-            "axis_maximum": [220.0, 225.0, 250.0, 0.0],
-        }});
+        let mut m = PrinterModel {
+            status: json!({ "toolhead": {
+                "homed_axes": "",
+                "axis_minimum": [0.0, -5.0, 0.0, 0.0],
+                "axis_maximum": [220.0, 225.0, 250.0, 0.0],
+            }}),
+            ..Default::default()
+        };
         assert_eq!(
             m.calibrate_z_gcode("probe", 100.0, 10.0).as_deref(),
             Some("G28\nG90\nG1 Z10 F600\nG1 X110.0 Y110.0 F6000\nPROBE_CALIBRATE")
@@ -815,8 +818,7 @@ mod tests {
 
     #[test]
     fn bed_level() {
-        let mut m = PrinterModel::default();
-        m.objects = Objects::discover(&[json!("screws_tilt_adjust"), json!("z_tilt")]);
+        let mut m = PrinterModel { objects: Objects::discover(&[json!("screws_tilt_adjust"), json!("z_tilt")]), ..Default::default() };
         assert!(m.objects.screws_tilt && m.objects.z_tilt && !m.objects.bed_screws);
         assert!(m.objects.subscription()["objects"].get("screws_tilt_adjust").is_some());
         m.status = json!({
@@ -849,8 +851,7 @@ mod tests {
 
     #[test]
     fn pid_calibrate() {
-        let mut m = PrinterModel::default();
-        m.objects = Objects::discover(&[json!("extruder"), json!("heater_generic chamber"), json!("temperature_fan pi")]);
+        let m = PrinterModel { objects: Objects::discover(&[json!("extruder"), json!("heater_generic chamber"), json!("temperature_fan pi")]), ..Default::default() };
         assert_eq!(m.pid_calibrate_gcode("extruder", 209.6).as_deref(), Some("PID_CALIBRATE HEATER=extruder TARGET=210"));
         assert_eq!(
             m.pid_calibrate_gcode("heater_generic chamber", 50.0).as_deref(),

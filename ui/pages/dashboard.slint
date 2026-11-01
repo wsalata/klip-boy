@@ -16,9 +16,10 @@ component StatTile inherits Rectangle {
     in property <bool> pulse;
     callback clicked();
 
-    height: 72px;
-    border-radius: Theme.radius;
+    height: 62px;
     clip: true;
+    border-width: 1px;
+    border-color: Theme.border;
     background: ta.pressed ? Theme.border : Theme.surface;
     accessible-role: button;
     accessible-label: root.label + " " + root.value + " " + root.target;
@@ -34,9 +35,8 @@ component StatTile inherits Rectangle {
         VerticalLayout {
             alignment: center;
             Rectangle {
-                width: 38px;
-                height: 38px;
-                border-radius: 19px;
+                width: 34px;
+                height: 34px;
                 background: root.tint.transparentize(0.82);
                 Image {
                     source: root.icon;
@@ -56,14 +56,14 @@ component StatTile inherits Rectangle {
                 text: root.value;
                 color: Theme.text;
                 font-family: Theme.display;
-                font-size: Theme.font-xl;
+                font-size: 28px;
                 font-weight: 700;
                 vertical-alignment: center;
             }
             Text {
                 text: root.target;
                 color: Theme.text-dim;
-                font-size: Theme.font-m;
+                font-size: Theme.font-s;
                 vertical-alignment: center;
                 overflow: elide;
             }
@@ -88,16 +88,16 @@ component ProgressBar inherits Rectangle {
     in property <bool> paused;
 
     height: 14px;
-    border-radius: self.height / 2;
     background: Theme.surface-2;
+    border-width: 1px;
+    border-color: Theme.border;
 
     Rectangle {
         x: 0;
         width: max(parent.height, parent.width * clamp(root.value, 0, 1));
         height: parent.height;
-        border-radius: parent.border-radius;
         clip: true;
-        background: root.paused ? Theme.warn : @linear-gradient(90deg, Theme.accent.darker(0.45) 0%, Theme.accent 100%);
+        background: root.paused ? Theme.warn : Theme.accent;
         animate width { duration: 600ms; easing: ease-out; }
 
         if !root.paused: Rectangle {
@@ -106,6 +106,12 @@ component ProgressBar inherits Rectangle {
             x: -self.width + (parent.width + self.width) * self.phase;
             background: @linear-gradient(90deg, #ffffff00 0%, #ffffff50 50%, #ffffff00 100%);
         }
+    }
+    // Gaps every 2% cut the fill into cells
+    for i in 49: Rectangle {
+        x: (i + 1) * root.width / 50 - 1px;
+        width: 2px;
+        background: Theme.bg;
     }
 }
 
@@ -127,8 +133,8 @@ export component DashboardPage inherits Rectangle {
     VerticalLayout {
         padding-left: 10px;
         padding-right: 10px;
-        padding-bottom: 16px;
-        spacing: 12px;
+        padding-bottom: 8px;
+        spacing: 10px;
 
         // Equal spacers above and below keep the job block in the middle of the free space
         Rectangle { vertical-stretch: 1; }
@@ -137,10 +143,11 @@ export component DashboardPage inherits Rectangle {
             spacing: 18px;
 
             Rectangle {
-                width: 232px;
-                height: 232px;
-                border-radius: Theme.radius-l;
+                width: 200px;
+                height: 200px;
                 background: Theme.surface;
+                border-width: 1px;
+                border-color: Theme.border;
                 clip: true;
                 if Printer.job-thumb.width > 0: Image {
                     source: Printer.job-thumb;
@@ -183,7 +190,7 @@ export component DashboardPage inherits Rectangle {
                             color: Theme.text;
                             font-family: Theme.display;
                             font-weight: 700;
-                            font-size: 84px;
+                            font-size: 72px;
                             vertical-alignment: bottom;
                         }
                         Text {
@@ -191,7 +198,7 @@ export component DashboardPage inherits Rectangle {
                             color: Theme.accent;
                             font-family: Theme.display;
                             font-weight: 600;
-                            font-size: 36px;
+                            font-size: 30px;
                             vertical-alignment: bottom;
                         }
                     }
@@ -214,7 +221,7 @@ export component DashboardPage inherits Rectangle {
                         color: Theme.text;
                         font-family: Theme.display;
                         font-weight: 700;
-                        font-size: 64px;
+                        font-size: 56px;
                     }
                     Text {
                         text: @tr("print time · filament {}", Printer.job.filament);
@@ -232,7 +239,7 @@ export component DashboardPage inherits Rectangle {
                         color: Theme.text;
                         font-family: Theme.display;
                         font-weight: 700;
-                        font-size: 56px;
+                        font-size: 48px;
                         overflow: elide;
                     }
                 }
@@ -240,7 +247,7 @@ export component DashboardPage inherits Rectangle {
 
             // Temperatures and fan, all adjusted in the Tune sheet
             VerticalLayout {
-                width: 220px;
+                width: 236px;
                 spacing: 8px;
                 alignment: center;
                 for h in Printer.top-heaters: StatTile {
@@ -294,15 +301,8 @@ export component DashboardPage inherits Rectangle {
         Rectangle { vertical-stretch: 1; }
 
         HorizontalLayout {
-            height: 60px;
+            height: 52px;
             spacing: 10px;
-            Btn {
-                text: @tr("Menu");
-                icon: @image-url("../icons/menu.svg");
-                kind: BtnKind.ghost;
-                width: 132px;
-                clicked => { Overlay.menu-open = true; }
-            }
             Rectangle { horizontal-stretch: 1; }
 
             if Printer.job.state == "printing": Btn {

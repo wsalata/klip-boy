@@ -152,7 +152,7 @@ export component NetworkPage inherits Rectangle {
             }
 
             Card {
-                horizontal-stretch: 1.3;
+                horizontal-stretch: 1.6;
                 VerticalLayout {
                     padding: 14px;
                     spacing: 8px;
@@ -168,15 +168,15 @@ export component NetworkPage inherits Rectangle {
                         Btn {
                             text: @tr("Hidden network");
                             font-size: Theme.font-s;
-                            width: 150px;
+                            width: 120px;
                             enabled: Network.wifi-present && Network.managed;
                             clicked => { Overlay.ask-hidden-network(); }
                         }
                         Btn {
+                            // No icon: "Scanning..." needs the room
                             text: Network.scanning ? @tr("Scanning...") : @tr("Scan");
-                            icon: @image-url("../icons/refresh.svg");
                             font-size: Theme.font-s;
-                            width: 150px;
+                            width: 156px;
                             enabled: Network.wifi-present && !Network.scanning;
                             clicked => { Network.scan(); }
                         }
@@ -209,7 +209,6 @@ export component NetworkPage inherits Rectangle {
                     if Network.wifi-present: Rectangle {
                         vertical-stretch: 1;
                         background: Theme.bg;
-                        border-radius: Theme.radius;
                         clip: true;
                         if Network.networks.length == 0: Caption {
                             text: Network.scanning ? @tr("Looking for networks...") : @tr("No networks found");

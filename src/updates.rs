@@ -20,7 +20,7 @@ pub fn parse_status(status: &Value) -> UpdateStatus {
         .map(|(name, info)| item(name, info))
         .collect();
     // As in Mainsail: alphabetical, the operating system's packages last
-    items.sort_by(|a, b| (a.name == "system", a.name.to_lowercase()).cmp(&(b.name == "system", b.name.to_lowercase())));
+    items.sort_by_key(|i| (i.name == "system", i.name.to_lowercase()));
     UpdateStatus { busy: status.get("busy").and_then(Value::as_bool).unwrap_or(false), items }
 }
 

@@ -1,37 +1,24 @@
 import { Theme } from "../theme.slint";
-import { Overlay, Nav, Settings, Preset, Strings } from "../state.slint";
+import { Overlay, Settings, Strings } from "../state.slint";
 import { Btn, BtnKind, Card, Caption, SettingRow } from "../widgets.slint";
 import { ScrollView } from "std-widgets.slint";
 
-component PresetRow inherits HorizontalLayout {
-    in property <Preset> preset;
-    in property <int> index;
-    spacing: 6px;
-    height: 48px;
-    Btn {
-        text: root.preset.name;
-        font-size: Theme.font-s;
-        horizontal-stretch: 2;
-        clicked => { Overlay.ask-text("name:" + root.index, @tr("Preset name"), root.preset.name); }
+// Cancel and Save for the panel settings (also used by the Presets page, saved with them), and
+// the error from the last save.
+export component SaveBar inherits VerticalLayout {
+    spacing: Theme.gap;
+    HorizontalLayout {
+        spacing: Theme.gap;
+        alignment: end;
+        // Back to the saved values
+        Btn { text: @tr("Cancel"); kind: BtnKind.ghost; width: 120px; clicked => { Settings.load(); } }
+        Btn { text: @tr("Save"); kind: BtnKind.accent; width: 120px; clicked => { Settings.save(); } }
     }
-    Btn {
-        text: round(root.preset.extruder) + "°";
+    if Settings.error-code != "": Text {
+        text: Strings.settings-error(Settings.error-code, Settings.error-arg);
+        color: Theme.danger;
         font-size: Theme.font-s;
-        horizontal-stretch: 1;
-        clicked => { Overlay.ask-number("ext:" + root.index, @tr("{} - nozzle", root.preset.name), root.preset.extruder, "°"); }
-    }
-    Btn {
-        text: round(root.preset.bed) + "°";
-        font-size: Theme.font-s;
-        horizontal-stretch: 1;
-        clicked => { Overlay.ask-number("bed:" + root.index, @tr("{} - bed", root.preset.name), root.preset.bed, "°"); }
-    }
-    Btn {
-        text: "X";
-        kind: BtnKind.ghost;
-        font-size: Theme.font-s;
-        width: 48px;
-        clicked => { Settings.preset-remove(root.index); }
+        wrap: word-wrap;
     }
 }
 
@@ -40,28 +27,14 @@ export component SettingsPage inherits Rectangle {
         padding: Theme.gap;
         spacing: Theme.gap;
 
-        HorizontalLayout {
-            spacing: Theme.gap;
-            // The title is in the header
-            alignment: end;
-            Btn { text: @tr("Cancel"); kind: BtnKind.ghost; width: 120px; clicked => { Nav.page = 7; } }
-            Btn { text: @tr("Save"); kind: BtnKind.accent; width: 120px; clicked => { Settings.save(); } }
-        }
-
-        if Settings.error-code != "": Text {
-            text: Strings.settings-error(Settings.error-code, Settings.error-arg);
-            color: Theme.danger;
-            font-size: Theme.font-s;
-            wrap: word-wrap;
-        }
+        SaveBar {}
 
         HorizontalLayout {
             spacing: Theme.gap;
             vertical-stretch: 1;
 
             Card {
-                // Half of the page (padding on both sides, gap between the cards)
-                width: (root.width - 3 * Theme.gap) / 2;
+                horizontal-stretch: 1;
                 // Scrolls when the screen is too short for all rows
                 ScrollView {
                 VerticalLayout {
@@ -100,39 +73,6 @@ export component SettingsPage inherits Rectangle {
                             clicked => { Settings.language = lang.code; }
                         }
                     }
-                    Caption {
-                        text: @tr("File: {}", Settings.config-path);
-                        wrap: word-wrap;
-                        font-size: 12px;
-                    }
-                }
-                }
-            }
-
-            Card {
-                horizontal-stretch: 1;
-                VerticalLayout {
-                    padding: 12px;
-                    spacing: 8px;
-                    HorizontalLayout {
-                        spacing: 6px;
-                        Caption { text: @tr("Presets (name, nozzle, bed)"); horizontal-stretch: 1; }
-                        Btn {
-                            text: @tr("+ Add");
-                            font-size: Theme.font-s;
-                            min-height: 40px;
-                            width: 100px;
-                            clicked => { Settings.preset-add(@tr("New")); }
-                        }
-                    }
-                    ScrollView {
-                        vertical-stretch: 1;
-                        VerticalLayout {
-                            alignment: start;
-                            spacing: 6px;
-                            for p[i] in Settings.presets: PresetRow { preset: p; index: i; }
-                        }
-                    }
                     Caption { text: @tr("Screen saver"); }
                     HorizontalLayout {
                         spacing: 4px;
@@ -150,6 +90,12 @@ export component SettingsPage inherits Rectangle {
                             clicked => { Settings.screensaver-minutes = option.minutes; }
                         }
                     }
+                    Caption {
+                        text: @tr("File: {}", Settings.config-path);
+                        wrap: word-wrap;
+                        font-size: 12px;
+                    }
+                }
                 }
             }
         }

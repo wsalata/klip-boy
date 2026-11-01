@@ -1,23 +1,24 @@
-// Concept C "at a glance": deep navy ground, teal accent, Saira type.
+// "Phosphor terminal": green CRT on near-black, square corners, one monospaced typeface.
+// Amber marks warnings and heat; red is kept for danger and the emergency stop.
 export global Theme {
-    out property <color> bg: #0B1220;
-    out property <color> surface: #121B2E;
-    out property <color> surface-2: #1C2840;
-    out property <color> border: #33435E;
-    out property <color> text: #E8EEF6;
-    out property <color> text-dim: #9FB0C6;
-    out property <color> accent: #2EC4B6;
-    // Text on an accent background (white on teal is too faint)
-    out property <color> on-accent: #06231F;
-    out property <color> ok: #2EC4B6;
-    out property <color> warn: #FFB020;
-    out property <color> danger: #E03131;
-    out property <color> danger-text: #FF8787;
-    out property <color> danger-border: #5C2A33;
-    out property <color> hot: #FF8A3D;
+    out property <color> bg: #041309;
+    out property <color> surface: #0F291C;
+    out property <color> surface-2: #123524;
+    out property <color> border: #0E5A36;
+    out property <color> text: #0FBB6B;
+    out property <color> text-dim: #0F8F54;
+    out property <color> accent: #0FBB6B;
+    // Text on an accent background: the green is lit, the text is the screen's black
+    out property <color> on-accent: #021009;
+    out property <color> ok: #0FBB6B;
+    out property <color> warn: #FFC23D;
+    out property <color> danger: #E8392B;
+    out property <color> danger-text: #FF7A66;
+    out property <color> danger-border: #6B2A22;
+    out property <color> hot: #FFB13D;
+    // Backdrop under dialogs
+    out property <color> scrim: #020804d0;
 
-    out property <length> radius: 14px;
-    out property <length> radius-l: 20px;
     out property <length> gap: 10px;
     out property <length> font-s: 14px;
     out property <length> font-m: 17px;
@@ -25,7 +26,7 @@ export global Theme {
     out property <length> font-xl: 34px;
 
     // Bundled in ui/fonts (OFL) and registered in app.slint
-    out property <string> font: "Saira";
-    out property <string> display: "Saira SemiCondensed";
-    out property <string> mono: "DejaVu Sans Mono";
+    out property <string> font: "Martian Mono Condensed";
+    out property <string> display: "Martian Mono Condensed";
+    out property <string> mono: "Martian Mono Condensed";
 }

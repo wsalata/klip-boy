@@ -12,6 +12,8 @@ export component Btn inherits Rectangle {
     in property <bool> active;
     in property <length> font-size: Theme.font-m;
     in property <length> icon-size: 22px;
+    // A long label takes a second line (at spaces) rather than being cut short
+    in property <bool> wrap;
     callback clicked();
 
     property <color> base: root.active ? Theme.accent
@@ -21,33 +23,33 @@ export component Btn inherits Rectangle {
         : Theme.surface-2;
     // Disabled keys are hollow with faded text, clearly apart from any working key
     property <color> fg: !root.enabled ? Theme.text-dim.transparentize(0.55)
+        : ta.pressed && root.kind != BtnKind.danger && root.kind != BtnKind.danger-outline ? Theme.on-accent
         : (root.active || root.kind == BtnKind.accent) ? Theme.on-accent
         : root.kind == BtnKind.danger ? #ffffff
-        : root.kind == BtnKind.danger-outline ? Theme.danger-text
+        : root.kind == BtnKind.danger-outline ? (ta.pressed ? #ffffff : Theme.danger-text)
         : Theme.text;
 
     min-height: 48px;
     min-width: 48px;
-    // Pills, but keys taller than ~52 px stay rounded rectangles
-    border-radius: min(self.height / 2, 26px);
     accessible-role: button;
     accessible-label: root.text;
     accessible-enabled: root.enabled;
     accessible-action-default => { root.clicked(); }
-    // Disabled keys keep only a faint outline
-    border-width: !root.enabled || root.kind == BtnKind.ghost || root.kind == BtnKind.danger-outline ? 1px : 0px;
+    // Outlined keys; disabled ones keep only a faint outline
+    border-width: root.enabled && (root.kind == BtnKind.accent || root.kind == BtnKind.danger || root.active) ? 0px : 1px;
     border-color: !root.enabled ? Theme.border.transparentize(0.4)
         : root.kind == BtnKind.danger-outline ? Theme.danger-border : Theme.border;
+    // A pressed key lights up like a highlighted terminal line
     background: !root.enabled ? transparent
-        : ta.pressed ? (root.base == transparent ? Theme.surface-2 : root.base.darker(0.35))
+        : ta.pressed ? (root.kind == BtnKind.danger || root.kind == BtnKind.danger-outline ? Theme.danger.darker(0.3) : Theme.accent.darker(0.25))
         : root.base;
     animate background { duration: 80ms; }
 
     HorizontalLayout {
         alignment: center;
         spacing: 8px;
-        padding-left: root.text != "" ? 14px : 8px;
-        padding-right: root.text != "" ? 14px : 8px;
+        padding-left: root.text != "" ? 10px : 8px;
+        padding-right: root.text != "" ? 10px : 8px;
         if root.icon.width > 0: VerticalLayout {
             alignment: center;
             Image {
@@ -63,6 +65,7 @@ export component Btn inherits Rectangle {
             font-size: root.font-size;
             vertical-alignment: center;
             horizontal-alignment: center;
+            wrap: root.wrap ? word-wrap : no-wrap;
             overflow: elide;
         }
     }
@@ -78,7 +81,6 @@ export component Btn inherits Rectangle {
 export component Thumb inherits Rectangle {
     in property <image> source;
     background: Theme.surface;
-    border-radius: 12px;
     clip: true;
     Image {
         source: root.source;
@@ -88,15 +90,27 @@ export component Thumb inherits Rectangle {
     }
 }
 
+// Framed panel with corner marks, as on a terminal readout.
 export component Card inherits Rectangle {
-    background: Theme.surface;
-    border-radius: Theme.radius-l;
+    background: Theme.surface.transparentize(0.4);
+    border-width: 1px;
+    border-color: Theme.border;
+    for c in [{ x: 0, y: 0 }, { x: 1, y: 0 }, { x: 0, y: 1 }, { x: 1, y: 1 }]: Rectangle {
+        x: c.x * (root.width - self.width);
+        y: c.y * (root.height - self.height);
+        width: 10px;
+        height: 10px;
+        Rectangle { x: 0; y: c.y * (parent.height - 2px); width: parent.width; height: 2px; background: Theme.accent; }
+        Rectangle { x: c.x * (parent.width - 2px); y: 0; width: 2px; height: parent.height; background: Theme.accent; }
+    }
+    @children
 }
 
 export component Caption inherits Text {
     color: Theme.text-dim;
     font-size: Theme.font-s;
     vertical-alignment: center;
+    overflow: elide;
 }
 
 // Pick one of several options (e.g. the jog step).
@@ -116,13 +130,11 @@ export component Bar inherits Rectangle {
     in property <float> value;
     in property <color> fill: Theme.accent;
     height: 6px;
-    border-radius: self.height / 2;
     background: Theme.surface-2;
     Rectangle {
         x: 0;
         width: parent.width * max(0, min(1, root.value));
         height: parent.height;
-        border-radius: parent.border-radius;
         background: root.fill;
     }
 }
@@ -184,6 +196,7 @@ export component FanSpeeds inherits HorizontalLayout {
         text: v + "";
         font-size: Theme.font-s;
         min-height: 40px;
+        min-width: 40px;
         active: (root.chosen >= 0 ? root.chosen : round(root.speed * 100)) == v;
         clicked => {
             root.chosen = v;
@@ -199,7 +212,6 @@ export component ValueBox inherits Rectangle {
     callback clicked();
     // Darker than the keys inside, so they read as buttons
     background: Theme.bg;
-    border-radius: Theme.radius-l;
     height: 80px;
     preferred-width: 200px;
     horizontal-stretch: 1;
@@ -225,7 +237,6 @@ export component Stepper inherits Rectangle {
     callback plus();
     // Darker than the keys inside, so they read as buttons
     background: Theme.bg;
-    border-radius: Theme.radius-l;
     height: 80px;
     // Equal widths side by side
     preferred-width: 200px;
@@ -269,7 +280,6 @@ export component SettingRow inherits Rectangle {
     in property <string> value;
     callback clicked();
     height: 52px;
-    border-radius: 8px;
     background: ta.pressed ? Theme.border : Theme.surface-2;
     HorizontalLayout {
         padding-left: 12px;

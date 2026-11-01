@@ -8,17 +8,16 @@ component Hint inherits Text {
     wrap: word-wrap;
 }
 
-// Numbered step of the procedure, with its controls on the right.
+// Numbered step of the procedure, with its controls below the text.
 component Step inherits HorizontalLayout {
     in property <int> number;
     in property <string> text;
     spacing: 10px;
     VerticalLayout {
-        alignment: center;
+        alignment: start;
         Rectangle {
             width: 28px;
             height: 28px;
-            border-radius: 14px;
             background: Theme.surface-2;
             Text {
                 text: root.number;
@@ -27,15 +26,23 @@ component Step inherits HorizontalLayout {
             }
         }
     }
-    Text {
-        text: root.text;
-        color: Theme.text;
-        font-size: Theme.font-s;
-        wrap: word-wrap;
-        vertical-alignment: center;
+    VerticalLayout {
+        spacing: 6px;
         horizontal-stretch: 1;
+        Text {
+            min-height: 28px;
+            text: root.text;
+            color: Theme.text;
+            font-size: Theme.font-s;
+            wrap: word-wrap;
+            vertical-alignment: center;
+        }
+        HorizontalLayout {
+            spacing: 12px;
+            alignment: start;
+            @children
+        }
     }
-    @children
 }
 
 // Extruder calibration as in Klipper's rotation_distance guide: mark the filament 120 mm above
@@ -72,6 +79,7 @@ export component ExtruderCalibratePage inherits Rectangle {
                     }
                     Btn {
                         width: 150px;
+                        font-size: Theme.font-s;
                         text: @tr("Heat to {}°", round(root.heat-to));
                         clicked => { Actions.set-temp("extruder", root.heat-to); }
                     }
@@ -86,7 +94,8 @@ export component ExtruderCalibratePage inherits Rectangle {
                         ? @tr("Extrude {} mm slowly. Too cold to extrude (min. {}°).", root.length, round(Printer.extruder-cal.min-temp))
                         : @tr("Extrude {} mm slowly (about 2 minutes) and wait until the motor stops.", root.length);
                     Btn {
-                        width: 190px;
+                        width: 170px;
+                        font-size: Theme.font-s;
                         text: @tr("Extrude {} mm", root.length);
                         kind: BtnKind.accent;
                         enabled: !root.cold && !Printer.printing && Printer.extruder-cal.available;
@@ -107,7 +116,7 @@ export component ExtruderCalibratePage inherits Rectangle {
         }
 
         Card {
-            width: 300px;
+            width: 230px;
             VerticalLayout {
                 padding: 12px;
                 spacing: 8px;

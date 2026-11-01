@@ -8,7 +8,7 @@ import { Bar } from "widgets.slint";
 export component ScreensaverView inherits Rectangle {
     background: #000000;
     property <int> step;
-    property <color> dim: #6B7A90;
+    property <color> dim: Theme.text-dim.darker(0.4);
 
     Timer {
         interval: 60s;

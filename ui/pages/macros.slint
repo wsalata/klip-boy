@@ -5,7 +5,8 @@ import { Btn, Caption } from "../widgets.slint";
 export component MacrosPage inherits Rectangle {
     property <length> pad: Theme.gap;
     property <length> row-h: 64px;
-    property <int> cols: max(1, floor((root.width - root.pad) / 180px));
+    // Wide enough for names like BED_MESH_CALIBRATE_FAST, which cannot wrap
+    property <int> cols: max(1, floor((root.width - root.pad) / 220px));
     property <length> cell-w: (root.width - root.pad * (root.cols + 1)) / root.cols;
 
     if Printer.macros.length == 0: Caption {

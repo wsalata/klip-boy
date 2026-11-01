@@ -1,6 +1,12 @@
 msgid ""
 msgstr ""
+"Project-Id-Version: klipper-helm\n"
+"PO-Revision-Date: 2026-11-01 23:10+0100\n"
+"Last-Translator: Walery Salata\n"
+"Language-Team: Polish\n"
+"MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
 "Language: pl\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 
@@ -25,9 +31,6 @@ msgstr "Konsola"
 msgid "System"
 msgstr "System"
 
-msgid "Panel settings"
-msgstr "Ustawienia panelu"
-
 msgid "Network"
 msgstr "Sieć"
 
@@ -36,9 +39,6 @@ msgstr "Aktualizacje"
 
 msgid "Home"
 msgstr "Pulpit"
-
-msgid "Menu"
-msgstr "Menu"
 
 msgid "Emergency stop"
 msgstr "Zatrzymanie awaryjne"
@@ -151,20 +151,8 @@ msgstr "Długość [mm]"
 msgid "Speed [mm/s]"
 msgstr "Prędkość [mm/s]"
 
-msgid "Retract"
-msgstr "Wycofaj"
-
-msgid "Extrude"
-msgstr "Ekstruduj"
-
 msgid "Filament change"
 msgstr "Wymiana filamentu"
-
-msgid "Unload filament"
-msgstr "Wyładuj filament"
-
-msgid "Load filament"
-msgstr "Załaduj filament"
 
 msgid "Fans"
 msgstr "Wentylatory"
@@ -451,9 +439,6 @@ msgstr "Zmniejsz: {}"
 msgid "Increase {}"
 msgstr "Zwiększ: {}"
 
-msgid "Z calibration"
-msgstr "Kalibracja Z"
-
 msgid "Probe offset (e.g. BLTouch)"
 msgstr "Offset sondy (np. BLTouch)"
 
@@ -492,9 +477,6 @@ msgstr "Przerwij"
 
 msgid "Accept"
 msgstr "Zatwierdź"
-
-msgid "Bed mesh"
-msgstr "Siatka stołu"
 
 msgid "Calibration"
 msgstr "Kalibracja"
@@ -583,8 +565,8 @@ msgstr "Klipper Helm {}"
 msgid "Working..."
 msgstr "Trwa praca..."
 
-msgid "Updates are not possible while printing."
-msgstr "Aktualizacje są niedostępne w trakcie druku."
+msgid "Not available while printing"
+msgstr "Niedostępne w trakcie druku"
 
 msgid "Moonraker's update manager is not available."
 msgstr "Menedżer aktualizacji Moonrakera jest niedostępny."
@@ -598,15 +580,6 @@ msgstr "Aktualizuj wszystko"
 msgid "Update everything? Klipper and Moonraker restart during the update."
 msgstr "Zaktualizować wszystko? Klipper i Moonraker zrestartują się w trakcie aktualizacji."
 
-msgid "Paper test: sets the distance between the nozzle and the bed."
-msgstr "Test kartki: ustawia odległość między dyszą a stołem."
-
-msgid "Probes the bed surface and manages saved mesh profiles."
-msgstr "Mierzy powierzchnię stołu i zarządza zapisanymi profilami siatki."
-
-msgid "Bed levelling"
-msgstr "Poziomowanie stołu"
-
 msgid "Bed screws"
 msgstr "Śruby stołu"
 
@@ -615,12 +588,6 @@ msgstr "Bramownica"
 
 msgid "Bed tilt"
 msgstr "Pochylenie stołu"
-
-msgid "Not configured"
-msgstr "Nieskonfigurowane"
-
-msgid "Levels the bed with its screws or with several Z motors."
-msgstr "Poziomuje stół śrubami lub kilkoma silnikami Z."
 
 msgid "Screw {}"
 msgstr "Śruba {}"
@@ -682,23 +649,11 @@ msgstr "Wyrównaj pochylenie stołu"
 msgid "Level gantry"
 msgstr "Wyrównaj bramownicę"
 
-msgid "Heaters"
-msgstr "Grzałki"
-
 msgid "Heater"
 msgstr "Grzałka"
 
-msgid "Heater calibration"
-msgstr "Kalibracja grzałek"
-
-msgid "PID tuning"
-msgstr "Strojenie PID"
-
 msgid "Calibrating"
 msgstr "Trwa kalibracja"
-
-msgid "Tunes how the nozzle and the bed hold their temperature."
-msgstr "Dostraja utrzymywanie temperatury dyszy i stołu."
 
 msgid "No heaters found."
 msgstr "Nie znaleziono grzałek."
@@ -712,17 +667,8 @@ msgstr "Zadana"
 msgid "Wait until Klipper reports the result. The emergency stop interrupts the calibration."
 msgstr "Poczekaj, aż Klipper poda wynik. Kalibrację przerywa zatrzymanie awaryjne."
 
-msgid "Extruder calibration"
-msgstr "Kalibracja ekstrudera"
-
 msgid "Extruder"
 msgstr "Ekstruder"
-
-msgid "Rotation distance {}"
-msgstr "Rotation distance {}"
-
-msgid "Makes the extruder push exactly as much filament as requested."
-msgstr "Sprawia, że ekstruder podaje dokładnie tyle filamentu, ile trzeba."
 
 msgid "Filament left above the extruder"
 msgstr "Filament pozostały nad ekstruderem"
@@ -786,3 +732,33 @@ msgstr "Zapisz w printer.cfg"
 
 msgid "Write rotation_distance: {} into printer.cfg?"
 msgstr "Zapisać rotation_distance: {} w printer.cfg?"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Control"
+msgstr "Sterowanie"
+
+msgid "Settings"
+msgstr "Ustawienia"
+
+msgid "Mesh"
+msgstr "Siatka"
+
+msgid "Heat the nozzle"
+msgstr "Nagrzej dyszę"
+
+msgid "No LOAD_FILAMENT / UNLOAD_FILAMENT macro in the Klipper config."
+msgstr "Brak makra LOAD_FILAMENT / UNLOAD_FILAMENT w konfiguracji Klippera."
+
+msgid "Manual extrusion"
+msgstr "Ręczne podawanie"
+
+msgid "Retract {} mm"
+msgstr "Wycofaj {} mm"
+
+msgid "Load"
+msgstr "Załaduj"
+
+msgid "Unload"
+msgstr "Wyładuj"

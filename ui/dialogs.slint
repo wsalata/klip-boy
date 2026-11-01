@@ -5,7 +5,7 @@ import { Btn, BtnKind, Card, Caption, InfoRow, Thumb, CursorText, Stepper, Value
 // Dimmed backdrop that blocks touches to the screen below.
 component Scrim inherits Rectangle {
     callback dismiss();
-    background: #050a14c0;
+    background: Theme.scrim;
     TouchArea {
         pointer-event(e) => { if (e.kind == PointerEventKind.down) { Screensaver.activity(); } }
         clicked => { root.dismiss(); }
@@ -14,7 +14,6 @@ component Scrim inherits Rectangle {
 
 component Dialog inherits Rectangle {
     background: Theme.surface;
-    border-radius: Theme.radius-l;
     border-width: 1px;
     border-color: Theme.border;
     TouchArea {}  // swallows clicks so they do not close the dialog
@@ -59,7 +58,6 @@ export component NumpadDialog inherits Scrim {
             Rectangle {
                 height: 52px;
                 background: Theme.bg;
-                border-radius: 8px;
                 HorizontalLayout {
                     padding-left: 12px;
                     padding-right: 12px;
@@ -162,7 +160,6 @@ export component TextDialog inherits Scrim {
                 Rectangle {
                     height: 46px;
                     background: Theme.bg;
-                    border-radius: 8px;
                     border-width: 1px;
                     border-color: Theme.accent;
                     clip: true;
@@ -349,45 +346,25 @@ export component FileDialog inherits Scrim {
 
 // Shown instead of a screen when Klipper is not ready or there is no connection.
 // Logo with the "klipperhelm" wordmark, as on the boot screen
-component Wordmark inherits HorizontalLayout {
-    in property <length> size: 50px;
-    alignment: center;
-    Text {
-        text: "klipper";
-        color: Theme.text;
-        font-size: root.size;
-        font-weight: 500;
+// Start-up screen: "Please stand by" in the middle of the screen. packaging/plymouth/logo.png is
+// the same picture, placed at the same spot.
+export component StandBy inherits Rectangle {
+    picture := Image {
+        source: @image-url("icons/standby.png");
+        height: 310px;
+        width: self.height * 900 / 620;
     }
+
     Text {
-        text: "helm";
-        color: Theme.accent;
-        font-size: root.size;
-        font-weight: 600;
+        y: picture.y + picture.height + 8px;
+        width: root.width;
+        text: Strings.status(Printer.status);
+        color: Theme.text-dim;
+        horizontal-alignment: center;
     }
 }
 
 export component NotReadyPanel inherits Rectangle {
-    background: Theme.bg;
-
-    // Starting up: a welcome screen until Moonraker answers (or fails to)
-    if Printer.conn == Conn.connecting: VerticalLayout {
-        alignment: center;
-        spacing: 18px;
-        HorizontalLayout {
-            alignment: center;
-            Image {
-                source: @image-url("icons/logo.svg");
-                width: 150px;
-                height: 150px;
-            }
-        }
-        Wordmark {}
-        Text {
-            text: Strings.status(Printer.status);
-            color: Theme.text-dim;
-            horizontal-alignment: center;
-        }
-    }
 
     if Printer.conn != Conn.connecting: VerticalLayout {
         alignment: center;
@@ -396,7 +373,8 @@ export component NotReadyPanel inherits Rectangle {
         HorizontalLayout {
             alignment: center;
             Image {
-                source: @image-url("icons/logo.svg");
+                source: @image-url("icons/helm.svg");
+                colorize: Theme.accent;
                 width: 64px;
                 height: 64px;
             }
@@ -436,26 +414,12 @@ export component NotReadyPanel inherits Rectangle {
                     Nav.page = 9;
                 }
             }
-            Btn {
-                text: @tr("Menu");
-                icon: @image-url("icons/menu.svg");
-                kind: BtnKind.ghost;
-                width: 150px;
-                clicked => { Overlay.menu-open = true; }
-            }
         }
         if Printer.conn == Conn.not-ready: HorizontalLayout {
             alignment: center;
             spacing: Theme.gap;
             Btn { text: @tr("Restart"); width: 200px; clicked => { Actions.restart(); } }
             Btn { text: @tr("Firmware restart"); kind: BtnKind.accent; width: 220px; clicked => { Actions.firmware-restart(); } }
-            Btn {
-                text: @tr("Menu");
-                icon: @image-url("icons/menu.svg");
-                kind: BtnKind.ghost;
-                width: 150px;
-                clicked => { Overlay.menu-open = true; }
-            }
         }
     }
 }
@@ -477,110 +441,6 @@ component SheetTitle inherits HorizontalLayout {
         kind: BtnKind.ghost;
         width: 130px;
         clicked => { root.close(); }
-    }
-}
-
-component MenuTile inherits Rectangle {
-    in property <image> icon;
-    in property <string> text;
-    in property <bool> active;
-    callback clicked();
-
-    // Equal widths in a row, whatever the label length
-    preferred-width: 100px;
-    horizontal-stretch: 1;
-    border-radius: Theme.radius-l;
-    background: ta.pressed ? Theme.border : root.active ? Theme.surface-2 : Theme.bg;
-    border-width: root.active ? 2px : 0px;
-    border-color: Theme.accent;
-    accessible-role: button;
-    accessible-label: root.text;
-    accessible-action-default => { root.clicked(); }
-
-    VerticalLayout {
-        alignment: center;
-        spacing: 8px;
-        HorizontalLayout {
-            alignment: center;
-            Image {
-                source: root.icon;
-                colorize: root.active ? Theme.accent : Theme.text;
-                width: 34px;
-                height: 34px;
-            }
-        }
-        Text {
-            text: root.text;
-            color: Theme.text;
-            horizontal-alignment: center;
-            overflow: elide;
-        }
-    }
-    ta := TouchArea {
-        pointer-event(e) => { if (e.kind == PointerEventKind.down) { Screensaver.activity(); } }
-        clicked => { root.clicked(); }
-    }
-}
-
-// All screens as big tiles; replaces the side navigation of earlier versions.
-export component MenuSheet inherits Scrim {
-    dismiss => { Overlay.menu-open = false; }
-
-    property <[{ icon: image, text: string, page: int }]> row1: [
-        { icon: @image-url("icons/home.svg"), text: @tr("Home"), page: 0 },
-        { icon: @image-url("icons/thermo.svg"), text: @tr("Temperature"), page: 1 },
-        { icon: @image-url("icons/move.svg"), text: @tr("Move"), page: 2 },
-        { icon: @image-url("icons/extrude.svg"), text: @tr("Filament"), page: 3 },
-        { icon: @image-url("icons/calibrate.svg"), text: @tr("Calibration"), page: 13 },
-    ];
-    property <[{ icon: image, text: string, page: int }]> row2: [
-        { icon: @image-url("icons/files.svg"), text: @tr("Files"), page: 4 },
-        { icon: @image-url("icons/macro.svg"), text: @tr("Macros"), page: 5 },
-        { icon: @image-url("icons/console.svg"), text: @tr("Console"), page: 6 },
-        { icon: @image-url("icons/system.svg"), text: @tr("System"), page: 7 },
-    ];
-
-    function go(page: int) {
-        Nav.page = page;
-        Overlay.menu-open = false;
-    }
-
-    Dialog {
-        width: root.width - 32px;
-        height: root.height - 32px;
-        VerticalLayout {
-            padding: 16px;
-            spacing: 12px;
-            SheetTitle {
-                text: @tr("Menu");
-                close => { Overlay.menu-open = false; }
-            }
-            HorizontalLayout {
-                spacing: 12px;
-                vertical-stretch: 1;
-                for item in root.row1: MenuTile {
-                    icon: item.icon;
-                    text: item.text;
-                    // Z calibration (11), Bed mesh (12), Bed levelling (14), Heaters (15) and Extruder (16) are sub-pages of Calibration
-                    active: Nav.page == item.page || (item.page == 13 && (Nav.page == 11 || Nav.page == 12 || Nav.page >= 14));
-                    clicked => { root.go(item.page); }
-                }
-            }
-            // One tile fewer than the first row: same tile width, centred
-            HorizontalLayout {
-                spacing: 12px;
-                vertical-stretch: 1;
-                alignment: center;
-                for item in root.row2: MenuTile {
-                    width: (root.width - 32px - 2 * 16px - (root.row1.length - 1) * 12px) / root.row1.length;
-                    icon: item.icon;
-                    text: item.text;
-                    // Settings (8), Network (9) and Updates (10) are sub-pages of System
-                    active: Nav.page == item.page || (item.page == 7 && Nav.page >= 8 && Nav.page <= 10);
-                    clicked => { root.go(item.page); }
-                }
-            }
-        }
     }
 }
 
@@ -630,7 +490,6 @@ export component TuneSheet inherits Scrim {
             }
             if Printer.has-part-fan: Rectangle {
                 background: Theme.bg;
-                border-radius: Theme.radius-l;
                 height: 80px;
                 HorizontalLayout {
                     padding: 12px;

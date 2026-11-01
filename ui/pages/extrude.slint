@@ -1,51 +1,80 @@
 import { Theme } from "../theme.slint";
-import { Printer, Actions, Overlay, Fan, Strings } from "../state.slint";
-import { Btn, BtnKind, Card, Caption, Segmented, Bar, FanSpeeds } from "../widgets.slint";
+import { Printer, Actions } from "../state.slint";
+import { Btn, BtnKind, Card, Caption, Segmented } from "../widgets.slint";
 
-component FanRow inherits VerticalLayout {
-    in property <Fan> fan;
-    spacing: 6px;
-    HorizontalLayout {
-        Text { text: Strings.fan-name(root.fan); color: Theme.text; overflow: elide; horizontal-stretch: 1; }
-        Text { text: round(root.fan.speed * 100) + "%"; color: Theme.text; font-weight: 700; horizontal-stretch: 0; }
-    }
-    if root.fan.settable: FanSpeeds { fan-id: root.fan.id; speed: root.fan.speed; }
-    if !root.fan.settable: Bar { value: root.fan.speed; }
-}
-
+// Two separate jobs: changing the spool with the printer's own macros (they decide how much and
+// how fast), and moving the filament by hand, where length and speed apply.
 export component ExtrudePage inherits Rectangle {
     property <[float]> lengths: [1, 5, 10, 25, 50];
     property <[float]> speeds: [1, 2, 5, 10];
     property <int> length-index: 2;
     property <int> speed-index: 1;
     property <bool> cold: Printer.extruder-temp < 170;
+    property <bool> has-macros: Printer.load-macro != "" || Printer.unload-macro != "";
 
     HorizontalLayout {
         padding: Theme.gap;
         spacing: Theme.gap;
 
         Card {
-            horizontal-stretch: 3;
+            horizontal-stretch: 1;
             VerticalLayout {
                 padding: 12px;
-                spacing: 10px;
+                spacing: 8px;
 
+                Caption { text: @tr("Filament change").to-uppercase(); color: Theme.text; letter-spacing: 1px; }
                 HorizontalLayout {
                     spacing: 12px;
                     Text {
                         text: @tr("Nozzle {}°", round(Printer.extruder-temp));
-                        color: Theme.text;
+                        color: root.cold ? Theme.warn : Theme.text;
                         font-size: Theme.font-l;
                         font-weight: 700;
-                        horizontal-stretch: 0;
                     }
-                    Caption {
-                        text: root.cold ? @tr("Too cold to extrude (min. 170°)") : "";
-                        color: Theme.warn;
-                        horizontal-stretch: 1;
+                }
+                // The macros usually do not heat, and Klipper refuses to extrude when cold
+                Caption { text: @tr("Heat the nozzle"); }
+                HorizontalLayout {
+                    spacing: 4px;
+                    for p in Printer.presets: Btn {
+                        text: p.name;
+                        font-size: Theme.font-s;
+                        enabled: !Printer.printing;
+                        clicked => { Actions.set-temp("extruder", p.extruder); }
                     }
                 }
 
+                Rectangle { vertical-stretch: 1; }
+
+                // The page is about filament already, so the keys say only what they do. They run the
+                // macros at once: nothing here is destructive, and a stuck macro can be stopped by E-stop
+                if Printer.unload-macro != "": Btn {
+                    text: @tr("Unload");
+                    icon: @image-url("../icons/unload.svg");
+                    enabled: !Printer.printing;
+                    clicked => { Actions.gcode(Printer.unload-macro); }
+                }
+                if Printer.load-macro != "": Btn {
+                    text: @tr("Load");
+                    kind: BtnKind.accent;
+                    icon: @image-url("../icons/load.svg");
+                    enabled: !Printer.printing;
+                    clicked => { Actions.gcode(Printer.load-macro); }
+                }
+                if !root.has-macros: Caption {
+                    text: @tr("No LOAD_FILAMENT / UNLOAD_FILAMENT macro in the Klipper config.");
+                    wrap: word-wrap;
+                }
+            }
+        }
+
+        Card {
+            horizontal-stretch: 1;
+            VerticalLayout {
+                padding: 12px;
+                spacing: 8px;
+
+                Caption { text: @tr("Manual extrusion").to-uppercase(); color: Theme.text; letter-spacing: 1px; }
                 Caption { text: @tr("Length [mm]"); }
                 Segmented { items: ["1", "5", "10", "25", "50"]; selected <=> root.length-index; }
                 Caption { text: @tr("Speed [mm/s]"); }
@@ -53,57 +82,24 @@ export component ExtrudePage inherits Rectangle {
 
                 Rectangle { vertical-stretch: 1; }
 
-                HorizontalLayout {
-                    spacing: Theme.gap;
-                    Btn {
-                        text: @tr("Retract");
-                        icon: @image-url("../icons/up.svg");
-                        enabled: !root.cold && !Printer.printing;
-                        clicked => { Actions.extrude(-root.lengths[root.length-index], root.speeds[root.speed-index]); }
-                    }
-                    Btn {
-                        text: @tr("Extrude");
-                        kind: BtnKind.accent;
-                        icon: @image-url("../icons/down.svg");
-                        enabled: !root.cold && !Printer.printing;
-                        clicked => { Actions.extrude(root.lengths[root.length-index], root.speeds[root.speed-index]); }
-                    }
+                if root.cold: Caption {
+                    text: @tr("Too cold to extrude (min. 170°)");
+                    color: Theme.warn;
+                    wrap: word-wrap;
                 }
-
-                if Printer.load-macro != "" || Printer.unload-macro != "": VerticalLayout {
-                    spacing: 6px;
-                    Caption { text: @tr("Filament change"); }
-                    HorizontalLayout {
-                        spacing: Theme.gap;
-                        if Printer.unload-macro != "": Btn {
-                            text: @tr("Unload filament");
-                            icon: @image-url("../icons/up.svg");
-                            enabled: !Printer.printing;
-                            clicked => { Overlay.ask(@tr("Run macro {}?", Printer.unload-macro), "gcode", Printer.unload-macro); }
-                        }
-                        if Printer.load-macro != "": Btn {
-                            text: @tr("Load filament");
-                            icon: @image-url("../icons/down.svg");
-                            enabled: !Printer.printing;
-                            clicked => { Overlay.ask(@tr("Run macro {}?", Printer.load-macro), "gcode", Printer.load-macro); }
-                        }
-                    }
+                Btn {
+                    text: @tr("Retract {} mm", root.lengths[root.length-index]);
+                    icon: @image-url("../icons/up.svg");
+                    enabled: !root.cold && !Printer.printing;
+                    clicked => { Actions.extrude(-root.lengths[root.length-index], root.speeds[root.speed-index]); }
                 }
-            }
-        }
-
-        Card {
-            horizontal-stretch: 2;
-            VerticalLayout {
-                padding: 12px;
-                spacing: 14px;
-                alignment: start;
-                HorizontalLayout {
-                    spacing: 8px;
-                    Image { source: @image-url("../icons/fan.svg"); colorize: Theme.text-dim; width: 20px; height: 20px; }
-                    Caption { text: @tr("Fans"); }
+                Btn {
+                    text: @tr("Extrude {} mm", root.lengths[root.length-index]);
+                    kind: BtnKind.accent;
+                    icon: @image-url("../icons/down.svg");
+                    enabled: !root.cold && !Printer.printing;
+                    clicked => { Actions.extrude(root.lengths[root.length-index], root.speeds[root.speed-index]); }
                 }
-                for f in Printer.fans: FanRow { fan: f; }
             }
         }
     }
