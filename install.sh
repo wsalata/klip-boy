@@ -155,8 +155,10 @@ prereqs() { echo "$PREREQ"; }
 case "$1" in prereqs) prereqs; exit 0 ;; esac
 . /usr/share/initramfs-tools/hook-functions
 for f in /lib/firmware/edid/*.bin; do
-	[ -e "$f" ] && copy_file firmware "$f"
+	# copy_file returns 1 when another hook has already added the file: that is fine
+	[ -e "$f" ] && copy_file firmware "$f" || true
 done
+exit 0
 EOF
 		sudo chmod 755 "$EDID_HOOK"
 	fi
