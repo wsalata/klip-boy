@@ -38,7 +38,7 @@ jobs:
             triplet: x86_64-linux-gnu
             cross: ""
     env:
-      KLIPPER_HELM_RELEASE_VERSION: ${{ inputs.version }}
+      KLIP_BOY_RELEASE_VERSION: ${{ inputs.version }}
       PKG_CONFIG_ALLOW_CROSS: "1"
       PKG_CONFIG_LIBDIR: /usr/lib/${{ matrix.triplet }}/pkgconfig:/usr/share/pkgconfig
       CARGO_TARGET_AARCH64_UNKNOWN_LINUX_GNU_LINKER: aarch64-linux-gnu-gcc
@@ -68,10 +68,10 @@ jobs:
             --target ${{ matrix.target }}
           mkdir -p dist
           # install.sh and Moonraker's update manager download exactly this name
-          cp target/${{ matrix.target }}/release/klipper-helm dist/klipper-helm-linux-${{ matrix.arch }}
+          cp target/${{ matrix.target }}/release/klip-boy dist/klip-boy-linux-${{ matrix.arch }}
           ls -l dist
 
       - uses: actions/upload-artifact@v4
         with:
-          name: klipper-helm-linux-${{ matrix.arch }}
+          name: klip-boy-linux-${{ matrix.arch }}
           path: dist/*

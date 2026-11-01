@@ -7,12 +7,12 @@
             "type": "lldb",
             "request": "launch",
             "cargo": {
-                "args": ["build", "--bin=klipper-helm", "--package=klipper-helm"],
-                "filter": { "name": "klipper-helm", "kind": "bin" }
+                "args": ["build", "--bin=klip-boy", "--package=klip-boy"],
+                "filter": { "name": "klip-boy", "kind": "bin" }
             },
             "env": {
                 "MOONRAKER_URL": "ws://127.0.0.1:7125/websocket",
-                "KLIPPER_HELM_CONFIG": "${workspaceFolder}/target/dev-mock.toml"
+                "KLIP_BOY_CONFIG": "${workspaceFolder}/target/dev-mock.toml"
             },
             "cwd": "${workspaceFolder}",
             "preLaunchTask": "Mock Moonraker"
@@ -22,13 +22,13 @@
             "type": "lldb",
             "request": "launch",
             "cargo": {
-                "args": ["build", "--bin=klipper-helm", "--package=klipper-helm"],
-                "filter": { "name": "klipper-helm", "kind": "bin" }
+                "args": ["build", "--bin=klip-boy", "--package=klip-boy"],
+                "filter": { "name": "klip-boy", "kind": "bin" }
             },
             "env": {
                 "MOONRAKER_URL": "ws://127.0.0.1:7125/websocket",
-                "KLIPPER_HELM_CONFIG": "${workspaceFolder}/target/dev-mock.toml",
-                "KLIPPER_HELM_SCREEN": "800x480"
+                "KLIP_BOY_CONFIG": "${workspaceFolder}/target/dev-mock.toml",
+                "KLIP_BOY_SCREEN": "800x480"
             },
             "cwd": "${workspaceFolder}",
             "preLaunchTask": "Mock Moonraker"
@@ -38,8 +38,8 @@
             "type": "lldb",
             "request": "launch",
             "cargo": {
-                "args": ["build", "--bin=klipper-helm", "--package=klipper-helm"],
-                "filter": { "name": "klipper-helm", "kind": "bin" }
+                "args": ["build", "--bin=klip-boy", "--package=klip-boy"],
+                "filter": { "name": "klip-boy", "kind": "bin" }
             },
             "cwd": "${workspaceFolder}"
         },
@@ -48,7 +48,7 @@
             "type": "lldb",
             "request": "launch",
             "cargo": {
-                "args": ["build", "--example=mock_moonraker", "--package=klipper-helm"],
+                "args": ["build", "--example=mock_moonraker", "--package=klip-boy"],
                 "filter": { "name": "mock_moonraker", "kind": "example" }
             },
             "cwd": "${workspaceFolder}"

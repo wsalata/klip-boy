@@ -18,7 +18,7 @@ export component SystemPage inherits Rectangle {
                 InfoRow { label: @tr("State"); value: Strings.status(Printer.status); }
                 InfoRow { label: "Klipper"; value: Printer.klipper-version; }
                 InfoRow { label: "Moonraker"; value: Printer.moonraker-url; }
-                InfoRow { label: "Klipper Helm"; value: Printer.panel-version; }
+                InfoRow { label: "Klip-Boy"; value: Printer.panel-version; }
                 if Strings.status-message() != "": Text {
                     text: Strings.status-message();
                     color: Theme.text-dim;

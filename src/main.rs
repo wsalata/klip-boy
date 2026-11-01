@@ -27,7 +27,7 @@ fn main() -> anyhow::Result<()> {
     }
     let cfg = config::Config::load();
     let ui = AppWindow::new()?;
-    if let Some((width, height)) = std::env::var("KLIPPER_HELM_SCREEN").ok().as_deref().and_then(parse_screen) {
+    if let Some((width, height)) = std::env::var("KLIP_BOY_SCREEN").ok().as_deref().and_then(parse_screen) {
         // The printer scales its screen to about 800x480 logical pixels (auto_scale), so a window
         // of that logical size shows the same layout
         let scale = scale_for(width, height);
@@ -94,7 +94,7 @@ fn main() -> anyhow::Result<()> {
     });
 
     #[cfg(debug_assertions)]
-    let _snapshots = std::env::var("KLIPPER_HELM_SNAPSHOT").ok().map(|dir| snapshot_pages(&ui, dir));
+    let _snapshots = std::env::var("KLIP_BOY_SNAPSHOT").ok().map(|dir| snapshot_pages(&ui, dir));
 
     ui.run()?;
     // Closing the channel ends the network thread
@@ -107,7 +107,7 @@ fn main() -> anyhow::Result<()> {
 /// Version shown on the System and Updates screens: the release CI built this binary as,
 /// or the Cargo version marked as a local build.
 fn panel_version() -> String {
-    match option_env!("KLIPPER_HELM_RELEASE_VERSION") {
+    match option_env!("KLIP_BOY_RELEASE_VERSION") {
         Some(v) if !v.is_empty() => v.trim_start_matches('v').to_string(),
         _ => format!("{}-dev", env!("CARGO_PKG_VERSION")),
     }

@@ -344,8 +344,6 @@ export component FileDialog inherits Scrim {
     }
 }
 
-// Shown instead of a screen when Klipper is not ready or there is no connection.
-// Logo with the "klipperhelm" wordmark, as on the boot screen
 // Start-up screen: "Please stand by" in the middle of the screen. packaging/plymouth/logo.png is
 // the same picture, placed at the same spot.
 export component StandBy inherits Rectangle {
@@ -364,6 +362,7 @@ export component StandBy inherits Rectangle {
     }
 }
 
+// Shown instead of a screen when Klipper is not ready or there is no connection.
 export component NotReadyPanel inherits Rectangle {
 
     if Printer.conn != Conn.connecting: VerticalLayout {

@@ -29,7 +29,7 @@
             "options": {
                 "env": {
                     "MOONRAKER_URL": "ws://127.0.0.1:7125/websocket",
-                    "KLIPPER_HELM_CONFIG": "${workspaceFolder}/target/dev-mock.toml"
+                    "KLIP_BOY_CONFIG": "${workspaceFolder}/target/dev-mock.toml"
                 }
             },
             "dependsOn": "Mock Moonraker",
@@ -44,8 +44,8 @@
             "options": {
                 "env": {
                     "MOONRAKER_URL": "ws://127.0.0.1:7125/websocket",
-                    "KLIPPER_HELM_CONFIG": "${workspaceFolder}/target/dev-mock.toml",
-                    "KLIPPER_HELM_SCREEN": "800x480"
+                    "KLIP_BOY_CONFIG": "${workspaceFolder}/target/dev-mock.toml",
+                    "KLIP_BOY_SCREEN": "800x480"
                 }
             },
             "dependsOn": "Mock Moonraker",
@@ -54,7 +54,7 @@
         },
         {
             "label": "Panel (printer)",
-            "detail": "Normal settings (~/.config/klipper-helm); change the address in System → Panel settings",
+            "detail": "Normal settings (~/.config/klip-boy); change the address in System → Panel settings",
             "type": "shell",
             "command": "cargo run",
             "problemMatcher": ["$rustc"],

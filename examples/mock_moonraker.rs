@@ -220,7 +220,7 @@ async fn client(stream: TcpStream) -> anyhow::Result<()> {
             ("klipper", "v0.13.0-120".into(), "v0.13.0-131".into()),
             ("moonraker", "v0.9.3-40".into(), "v0.9.3-40".into()),
             ("mainsail", "v2.14.0".into(), "v2.14.0".into()),
-            ("klipper-helm", "v0.2.1".into(), "v0.3.0".into()),
+            ("klip-boy", "v0.2.1".into(), "v0.3.0".into()),
         ],
     };
     let mut tick = tokio::time::interval(Duration::from_millis(500));

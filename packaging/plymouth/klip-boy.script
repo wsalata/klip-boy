@@ -1,4 +1,4 @@
-# Klipper Helm boot splash: "Please stand by" exactly where the panel's welcome screen draws it, so the
+# Klip-Boy boot splash: "Please stand by" exactly where the panel's welcome screen draws it, so the
 # hand-over to the panel (plymouth quit --retain-splash) shows no jump.
 
 # Theme.bg (ui/theme.slint)

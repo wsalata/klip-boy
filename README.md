@@ -1,4 +1,4 @@
-# Klipper Helm
+# Klip-Boy
 
 A touch screen panel for Klipper/Moonraker, a KlipperScreen replacement written in Rust + Slint.
 On a Raspberry Pi it draws directly through KMS/DRM (no X11/Wayland); on a PC it runs in a window.
@@ -42,13 +42,13 @@ cargo run                                   # panel in a window
 With a real printer: `cargo run` and set the address in System → Panel settings
 (or `MOONRAKER_URL=ws://<printer-ip>:7125/websocket cargo run` if the config file has no address).
 
-To see the layout of the printer's screen, set its resolution: `KLIPPER_HELM_SCREEN=800x480 cargo run`
+To see the layout of the printer's screen, set its resolution: `KLIP_BOY_SCREEN=800x480 cargo run`
 (or `1024x600`, `1280x720`, ...). The panel is then drawn at that size in the middle of the window,
 scaled the way the printer scales it, also under tiling window managers.
 
 In VS Code, the tasks in `.vscode/` start the mock and the panel together (Ctrl+Shift+P → "Tasks: Run Task").
 
-Snapshots of all views (debug builds only): `KLIPPER_HELM_SNAPSHOT=<dir> cargo run` saves `page-N.ppm` files and quits.
+Snapshots of all views (debug builds only): `KLIP_BOY_SNAPSHOT=<dir> cargo run` saves `page-N.ppm` files and quits.
 
 ## Installing on the printer's computer
 
@@ -57,16 +57,20 @@ MainsailOS, Debian bookworm or newer), next to Moonraker and Mainsail. Connect t
 touch over USB) and run, as the user Klipper runs as:
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/wsalata/klipper-helm/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/wsalata/klip-boy/main/install.sh | bash
 ```
+
+The panel used to be called **Klipper Helm**. The installer stops if the old one is installed and
+prints the command that removes it (`install.sh --uninstall` of v0.6.0); its settings
+(`klipper-helm.toml`, `klipper-helm.env`) are copied to `klip-boy.toml` and `klip-boy.env`.
 
 The installer:
 
-- downloads the latest release for the system (`klipper-helm-linux-arm64`, `-armhf` or `-amd64`) into
-  `~/klipper-helm`, with the few libraries it needs;
-- installs the `klipper-helm` systemd service (lower priority than Klipper) and disables KlipperScreen,
+- downloads the latest release for the system (`klip-boy-linux-arm64`, `-armhf` or `-amd64`) into
+  `~/klip-boy`, with the few libraries it needs;
+- installs the `klip-boy` systemd service (lower priority than Klipper) and disables KlipperScreen,
   since only one program can draw on the screen;
-- adds `[update_manager klipper-helm]` (type `executable`) to `moonraker.conf` and the service to
+- adds `[update_manager klip-boy]` (type `executable`) to `moonraker.conf` and the service to
   `moonraker.asvc`, so updates appear in Mainsail next to Klipper's and Moonraker's, and Mainsail can
   restart the panel;
 - with NetworkManager (Raspberry Pi OS / MainsailOS on bookworm or newer), adds a polkit rule that
@@ -75,24 +79,24 @@ The installer:
 `bash install.sh --uninstall` removes it all again and re-enables KlipperScreen if it was in use.
 
 On a Raspberry Pi, `--boot-splash` also replaces the boot screen (the rainbow square, the raspberries and
-the boot messages) with the Klipper Helm logo, shown a few seconds after power-on and kept until the
+the boot messages) with the Klip-Boy logo, shown a few seconds after power-on and kept until the
 panel draws its first frame, at the same spot as the panel's welcome screen:
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/wsalata/klipper-helm/main/install.sh | bash -s -- --boot-splash
+curl -fsSL https://raw.githubusercontent.com/wsalata/klip-boy/main/install.sh | bash -s -- --boot-splash
 ```
 
 It installs Plymouth with the theme from [packaging/plymouth](packaging/plymouth) (rebuilding the
 initramfs, together with corrected screen EDIDs from `/lib/firmware/edid` if there are any), adds `disable_splash=1` to `config.txt`, and in `cmdline.txt` moves the console to `tty3` and
 adds `quiet splash loglevel=3 logo.nologo vt.global_cursor_default=0 plymouth.ignore-serial-consoles`.
-Both files are backed up first (`*.klipper-helm.bak`); `--uninstall` undoes exactly these changes. The
+Both files are backed up first (`*.klip-boy.bak`); `--uninstall` undoes exactly these changes. The
 splash image `packaging/plymouth/logo.png` is a copy of the panel's start-up picture
 `ui/icons/standby.png`, placed where the panel draws it; replace both together.
 
 The panel draws through DRM/KMS without X11 or Wayland: HDMI and DSI screens work, as do SPI screens with
 a DRM driver (e.g. `panel-mipi-dbi`); SPI screens with only an `fbtft` framebuffer driver do not.
-Screen rotation and the UI scale go in `~/printer_data/config/klipper-helm.env`, next to the panel
-settings (`klipper-helm.toml`); both can be edited in Mainsail.
+Screen rotation and the UI scale go in `~/printer_data/config/klip-boy.env`, next to the panel
+settings (`klip-boy.toml`); both can be edited in Mainsail.
 
 ### Releasing
 
@@ -111,7 +115,7 @@ cargo build --release --no-default-features --features embedded
 
 Where to look on the printer's computer:
 
-- `journalctl -u klipper-helm -n 50` – the panel's log. At start it names the screen and mode it uses
+- `journalctl -u klip-boy -n 50` – the panel's log. At start it names the screen and mode it uses
   (`Display HDMI-A-1: 1024x600@59`).
 - `sudo dmesg | grep -i drm` – the kernel's view of the screen.
 - `grep -l '^connected' /sys/class/drm/*/status` – the port the screen is on (e.g. `card1-HDMI-A-1`);
@@ -170,7 +174,7 @@ boot screen. On the printer's computer:
    If the graphics driver starts from the initramfs (as with Plymouth, so with `--boot-splash`), the file
    must be in the initramfs too, or `dmesg` shows `Direct firmware load for edid/… failed with error -2`
    and the screen stays black. `install.sh --boot-splash` takes care of it when the file exists
-   (`/etc/initramfs-tools/hooks/klipper-helm-edid`); after installing the splash first, run
+   (`/etc/initramfs-tools/hooks/klip-boy-edid`); after installing the splash first, run
    `bash install.sh --boot-splash` again, or `sudo update-initramfs -u -k all` once the hook is there.
 
 3. Set the same resolution for the boot screen, at the end of `/boot/firmware/config.txt` (the
@@ -189,14 +193,14 @@ boot screen. On the printer's computer:
 
 Another screen with the same problem needs its own manufacturer's timing in step 1. A screen that only
 reports a wrong preferred mode, but one the Pi can output, needs just `video=HDMI-A-1:<width>x<height>@60`
-in `cmdline.txt` for the boot screen and `SLINT_DRM_MODE=<index>` in `klipper-helm.env` for the panel
+in `cmdline.txt` for the boot screen and `SLINT_DRM_MODE=<index>` in `klip-boy.env` for the panel
 (`SLINT_DRM_MODE=list` prints the indexes).
 
 ### No picture after enabling the boot splash
 
 The boot messages are on `tty3` now, so a problem during boot is not visible on the screen; use SSH, or
 `sudo journalctl -b`. If the system does not boot at all, put the SD card into another computer and on
-its `bootfs` partition replace `cmdline.txt` and `config.txt` with the `*.klipper-helm.bak` copies.
+its `bootfs` partition replace `cmdline.txt` and `config.txt` with the `*.klip-boy.bak` copies.
 
 ### The panel does not start: no connected display
 
@@ -217,8 +221,8 @@ Settings (Moonraker address, language, manual movement speeds, temperature prese
 **System → Panel settings** screen. Saving applies them immediately: changing the address switches the panel
 to another printer without a restart. The screen also works without a connection, so a wrong address can be fixed.
 
-Settings are stored in `~/.config/klipper-helm/config.toml`, or the file given by `KLIPPER_HELM_CONFIG`
-(`~/printer_data/config/klipper-helm.toml` when installed with `install.sh`), see
+Settings are stored in `~/.config/klip-boy/config.toml`, or the file given by `KLIP_BOY_CONFIG`
+(`~/printer_data/config/klip-boy.toml` when installed with `install.sh`), see
 [config.example.toml](config.example.toml). The address in the file takes precedence over `MOONRAKER_URL`.
 
 ## Look and fonts
@@ -239,7 +243,7 @@ so the Pi needs no extra font packages; colors and sizes live in `ui/theme.slint
 ## Translations
 
 UI text is written in English in the `.slint` files and marked with `@tr("...")`. Translations are compiled
-into the binary from `ui/translations/<lang>/LC_MESSAGES/klipper-helm.po` (gettext format, no message context).
+into the binary from `ui/translations/<lang>/LC_MESSAGES/klip-boy.po` (gettext format, no message context).
 The language follows the system locale (`LANG`) or the choice in Panel settings, and can be switched live.
 
 Rust code never produces user-visible text: it sends codes (e.g. `Status`, heater `role`) and Slint turns them
@@ -251,9 +255,9 @@ The template can be regenerated with
 
 ```sh
 cargo install slint-tr-extractor
-find ui -name '*.slint' | xargs slint-tr-extractor --no-default-translation-context -o klipper-helm.pot
-msgmerge -U ui/translations/pl/LC_MESSAGES/klipper-helm.po klipper-helm.pot
+find ui -name '*.slint' | xargs slint-tr-extractor --no-default-translation-context -o klip-boy.pot
+msgmerge -U ui/translations/pl/LC_MESSAGES/klip-boy.po klip-boy.pot
 ```
 
-A new language is a new directory, e.g. `ui/translations/de/LC_MESSAGES/klipper-helm.po`, plus an entry in
+A new language is a new directory, e.g. `ui/translations/de/LC_MESSAGES/klip-boy.po`, plus an entry in
 `LANGUAGES` (`src/config.rs`) and a button in `ui/pages/settings.slint`.

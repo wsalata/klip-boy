@@ -116,7 +116,7 @@ mod tests {
                 "moonraker": { "version": "v0.9.3-10", "remote_version": "v0.9.3-12", "is_valid": true,
                                "commits_behind": [{}, {}] },
                 "Mainsail": { "version": "v2.14.0", "remote_version": "v2.14.0", "is_valid": true },
-                "klipper-helm": { "version": "v0.3.0", "remote_version": "v0.3.1", "is_valid": true },
+                "klip-boy": { "version": "v0.3.0", "remote_version": "v0.3.1", "is_valid": true },
                 "klipper": { "version": "v0.13.0", "remote_version": "?", "is_valid": false },
             },
         }));
@@ -128,8 +128,8 @@ mod tests {
         assert_eq!(
             rows,
             [
+                ("klip-boy".into(), "available".into(), "v0.3.1".into(), 0),
                 ("klipper".into(), "invalid".into(), "".into(), 0),
-                ("klipper-helm".into(), "available".into(), "v0.3.1".into(), 0),
                 ("Mainsail".into(), "up-to-date".into(), "v2.14.0".into(), 0),
                 ("moonraker".into(), "available".into(), "v0.9.3-12".into(), 0),
                 ("system".into(), "available".into(), "".into(), 3),
@@ -157,7 +157,7 @@ mod tests {
     #[test]
     fn older_remote_is_not_an_update() {
         let status = parse_status(&json!({ "version_info": {
-            "klipper-helm": { "configured_type": "executable", "version": "v0.4.0",
+            "klip-boy": { "configured_type": "executable", "version": "v0.4.0",
                               "remote_version": "v0.3.2", "is_valid": true },
             "klipper": { "configured_type": "git_repo", "version": "v0.13.0-120",
                          "remote_version": "v0.13.0-131", "is_valid": true, "commits_behind": [] },

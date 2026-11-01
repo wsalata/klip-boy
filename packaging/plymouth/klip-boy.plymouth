@@ -1,8 +1,8 @@
 [Plymouth Theme]
-Name=Klipper Helm
-Description=The Klipper Helm logo from power-on until the panel starts
+Name=Klip-Boy
+Description=The Klip-Boy logo from power-on until the panel starts
 ModuleName=script
 
 [script]
-ImageDir=/usr/share/plymouth/themes/klipper-helm
-ScriptFile=/usr/share/plymouth/themes/klipper-helm/klipper-helm.script
+ImageDir=/usr/share/plymouth/themes/klip-boy
+ScriptFile=/usr/share/plymouth/themes/klip-boy/klip-boy.script

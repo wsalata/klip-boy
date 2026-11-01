@@ -62,7 +62,7 @@ impl Default for Config {
 }
 
 impl Config {
-    /// File: $KLIPPER_HELM_CONFIG or ~/.config/klipper-helm/config.toml.
+    /// File: $KLIP_BOY_CONFIG or ~/.config/klip-boy/config.toml.
     /// Moonraker address: from the file, or if missing there, from MOONRAKER_URL or the default.
     /// This way an address saved from the panel wins over the variable in the service file.
     pub fn load() -> Self {
@@ -123,13 +123,13 @@ impl Config {
     }
 
     pub fn path() -> Option<PathBuf> {
-        if let Ok(p) = std::env::var("KLIPPER_HELM_CONFIG") {
+        if let Ok(p) = std::env::var("KLIP_BOY_CONFIG") {
             return Some(p.into());
         }
         let base = std::env::var_os("XDG_CONFIG_HOME")
             .map(PathBuf::from)
             .or_else(|| std::env::var_os("HOME").map(|h| PathBuf::from(h).join(".config")))?;
-        Some(base.join("klipper-helm").join("config.toml"))
+        Some(base.join("klip-boy").join("config.toml"))
     }
 }
 

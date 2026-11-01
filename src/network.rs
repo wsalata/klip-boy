@@ -2,7 +2,7 @@
 //! and Wi-Fi status, scanning and joining Wi-Fi networks (hidden ones too), and the
 //! Ethernet address (DHCP or static).
 //!
-//! Changing anything requires KLIPPER_HELM_MANAGE_NETWORK=1, which install.sh sets together
+//! Changing anything requires KLIP_BOY_MANAGE_NETWORK=1, which install.sh sets together
 //! with a polkit rule that lets the panel's user change NetworkManager's settings. Without
 //! it (e.g. running the panel on a PC) the screen only shows the status.
 
@@ -117,7 +117,7 @@ struct NetStatus {
 }
 
 pub fn wire(ui: &AppWindow) {
-    let managed = std::env::var("KLIPPER_HELM_MANAGE_NETWORK").is_ok_and(|v| v == "1");
+    let managed = std::env::var("KLIP_BOY_MANAGE_NETWORK").is_ok_and(|v| v == "1");
 
     let (tx, rx) = mpsc::channel::<NetCommand>();
     let weak = ui.as_weak();

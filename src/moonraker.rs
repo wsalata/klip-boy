@@ -199,7 +199,7 @@ impl<'a> Session<'a> {
         self.call(
             "server.connection.identify",
             json!({
-                "client_name": "klipper-helm",
+                "client_name": "klip-boy",
                 "version": env!("CARGO_PKG_VERSION"),
                 "type": "display",
                 "url": "https://github.com/",

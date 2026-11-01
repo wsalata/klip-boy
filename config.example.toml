@@ -1,5 +1,5 @@
-# Copy to ~/.config/klipper-helm/config.toml (or point to it with KLIPPER_HELM_CONFIG;
-# install.sh uses ~/printer_data/config/klipper-helm.toml).
+# Copy to ~/.config/klip-boy/config.toml (or point to it with KLIP_BOY_CONFIG;
+# install.sh uses ~/printer_data/config/klip-boy.toml).
 # The panel writes the same file (System → Panel settings).
 # The address in this file wins; MOONRAKER_URL is only used when it is missing here.
 

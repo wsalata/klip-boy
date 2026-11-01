@@ -1,29 +1,29 @@
 #!/bin/bash
-# Installs Klipper Helm on the printer's computer next to Klipper, Moonraker and Mainsail
+# Installs Klip-Boy on the printer's computer next to Klipper, Moonraker and Mainsail
 # (Raspberry Pi OS, MainsailOS or another Debian-based system), or removes it again:
 #
-#   curl -fsSL https://raw.githubusercontent.com/wsalata/klipper-helm/main/install.sh | bash
+#   curl -fsSL https://raw.githubusercontent.com/wsalata/klip-boy/main/install.sh | bash
 #   bash install.sh --uninstall
 #
-# With --boot-splash (Raspberry Pi) it also replaces the boot screen with the Klipper Helm logo:
-#   curl -fsSL https://raw.githubusercontent.com/wsalata/klipper-helm/main/install.sh | bash -s -- --boot-splash
+# With --boot-splash (Raspberry Pi) it also replaces the boot screen with the Klip-Boy logo:
+#   curl -fsSL https://raw.githubusercontent.com/wsalata/klip-boy/main/install.sh | bash -s -- --boot-splash
 #
 # Run it as the user Klipper runs as (not root); it asks for sudo where needed. Updates then
 # come through Moonraker's update manager, like Klipper's and Mainsail's.
 set -euo pipefail
 
-REPO=wsalata/klipper-helm
-DIR="$HOME/klipper-helm"
+REPO=wsalata/klip-boy
+DIR="$HOME/klip-boy"
 DATA="$HOME/printer_data"
 CONFIG_DIR="$DATA/config"
 MOONRAKER_CONF="$CONFIG_DIR/moonraker.conf"
 ASVC="$DATA/moonraker.asvc"
-SERVICE=/etc/systemd/system/klipper-helm.service
-POLKIT_RULE=/etc/polkit-1/rules.d/50-klipper-helm.rules
-STATE_DIR=/var/lib/klipper-helm
-SECTION="[update_manager klipper-helm]"
-THEME_DIR=/usr/share/plymouth/themes/klipper-helm
-EDID_HOOK=/etc/initramfs-tools/hooks/klipper-helm-edid
+SERVICE=/etc/systemd/system/klip-boy.service
+POLKIT_RULE=/etc/polkit-1/rules.d/50-klip-boy.rules
+STATE_DIR=/var/lib/klip-boy
+SECTION="[update_manager klip-boy]"
+THEME_DIR=/usr/share/plymouth/themes/klip-boy
+EDID_HOOK=/etc/initramfs-tools/hooks/klip-boy-edid
 SPLASH_STATE="$STATE_DIR/boot-splash"
 USER=${USER:-$(id -un)}
 
@@ -77,7 +77,7 @@ cmdline, config = os.path.join(boot, "cmdline.txt"), os.path.join(boot, "config.
 # No kernel messages, logos or blinking cursor on the screen; Plymouth shows the splash
 SPLASH = ["quiet", "splash", "loglevel=3", "logo.nologo", "vt.global_cursor_default=0",
           "plymouth.ignore-serial-consoles"]
-CONFIG_BLOCK = "\n\n[all]\n# Klipper Helm boot splash: no rainbow square\ndisable_splash=1\n"
+CONFIG_BLOCK = "\n\n[all]\n# Klip-Boy boot splash: no rainbow square\ndisable_splash=1\n"
 
 state = {}
 if os.path.exists(state_path):
@@ -87,8 +87,8 @@ config_text = open(config).read()
 
 if mode == "apply":
     for path in (cmdline, config):
-        if not os.path.exists(path + ".klipper-helm.bak"):
-            shutil.copy2(path, path + ".klipper-helm.bak")
+        if not os.path.exists(path + ".klip-boy.bak"):
+            shutil.copy2(path, path + ".klip-boy.bak")
     added = state.get("cmdline_added", "").split()
     # Boot messages go to tty3, out of sight
     if "console=tty1" in tokens:
@@ -119,7 +119,7 @@ open(config, "w").write(config_text)
 EOF
 }
 
-# Plymouth with the Klipper Helm theme, shown from early boot until the panel takes over
+# Plymouth with the Klip-Boy theme, shown from early boot until the panel takes over
 install_boot_splash() {
 	local boot
 	boot=$(boot_dir)
@@ -133,7 +133,7 @@ install_boot_splash() {
 	# From a copy of the repository next to this script (testing before a release), else from GitHub
 	local here=""
 	[ -f "${BASH_SOURCE[0]:-}" ] && here="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/packaging/plymouth"
-	for f in klipper-helm.plymouth klipper-helm.script logo.png; do
+	for f in klip-boy.plymouth klip-boy.script logo.png; do
 		if [ -n "$here" ] && [ -f "$here/$f" ]; then
 			sudo cp "$here/$f" "$THEME_DIR/$f"
 		else
@@ -142,14 +142,14 @@ install_boot_splash() {
 	done
 	local previous
 	previous=$(plymouth-set-default-theme 2>/dev/null || true)
-	[ "$previous" = klipper-helm ] && previous=""
+	[ "$previous" = klip-boy ] && previous=""
 	# Plymouth puts the graphics driver into the initramfs, where it starts before the root
 	# filesystem: a corrected EDID (drm.edid_firmware=, see README "Troubleshooting") must be
 	# there too, or the screen stays black
 	if compgen -G "/lib/firmware/edid/*.bin" >/dev/null; then
 		sudo tee "$EDID_HOOK" >/dev/null <<'EOF'
 #!/bin/sh
-# Klipper Helm: corrected screen EDIDs (/lib/firmware/edid) for the graphics driver in the initramfs
+# Klip-Boy: corrected screen EDIDs (/lib/firmware/edid) for the graphics driver in the initramfs
 PREREQ=""
 prereqs() { echo "$PREREQ"; }
 case "$1" in prereqs) prereqs; exit 0 ;; esac
@@ -161,9 +161,9 @@ EOF
 		sudo chmod 755 "$EDID_HOOK"
 	fi
 	# Also rebuilds the initramfs, so the splash appears before the root filesystem is mounted
-	sudo plymouth-set-default-theme -R klipper-helm
+	sudo plymouth-set-default-theme -R klip-boy
 	edit_boot_files "$boot" apply "$previous"
-	say "Boot splash installed; backups: $boot/cmdline.txt.klipper-helm.bak, $boot/config.txt.klipper-helm.bak"
+	say "Boot splash installed; backups: $boot/cmdline.txt.klip-boy.bak, $boot/config.txt.klip-boy.bak"
 }
 
 remove_boot_splash() {
@@ -180,13 +180,13 @@ remove_boot_splash() {
 }
 
 uninstall() {
-	say "Removing Klipper Helm"
+	say "Removing Klip-Boy"
 	remove_boot_splash
-	sudo systemctl disable --now klipper-helm.service 2>/dev/null || true
+	sudo systemctl disable --now klip-boy.service 2>/dev/null || true
 	sudo rm -f "$SERVICE" "$POLKIT_RULE"
 	sudo systemctl daemon-reload
 	remove_update_section
-	[ -f "$ASVC" ] && sed -i '/^klipper-helm$/d' "$ASVC"
+	[ -f "$ASVC" ] && sed -i '/^klip-boy$/d' "$ASVC"
 	rm -rf "$DIR"
 	if [ -e "$STATE_DIR/klipperscreen-was-enabled" ]; then
 		sudo systemctl enable --now KlipperScreen.service || true
@@ -194,7 +194,7 @@ uninstall() {
 	fi
 	sudo rm -rf "$STATE_DIR"
 	sudo systemctl restart moonraker.service || true
-	say "Done. The panel settings stay in $CONFIG_DIR/klipper-helm.toml."
+	say "Done. The panel settings stay in $CONFIG_DIR/klip-boy.toml."
 }
 
 BOOT_SPLASH=0
@@ -210,11 +210,26 @@ for arg in "$@"; do
 done
 
 case "$(dpkg --print-architecture 2>/dev/null || uname -m)" in
-arm64 | aarch64) ASSET=klipper-helm-linux-arm64 ;;
-armhf | armv7l) ASSET=klipper-helm-linux-armhf ;;
-amd64 | x86_64) ASSET=klipper-helm-linux-amd64 ;;
+arm64 | aarch64) ASSET=klip-boy-linux-arm64 ;;
+armhf | armv7l) ASSET=klip-boy-linux-armhf ;;
+amd64 | x86_64) ASSET=klip-boy-linux-amd64 ;;
 *) die "Unsupported system architecture: $(uname -m)" ;;
 esac
+
+# Renamed from Klipper Helm: the old install must go first (its service, update section, boot
+# splash), with the old installer that knows its names
+if [ -e /etc/systemd/system/klipper-helm.service ]; then
+	die "Klipper Helm (the old name of this panel) is installed. Remove it first:
+  curl -fsSL https://raw.githubusercontent.com/$REPO/v0.6.0/install.sh | bash -s -- --uninstall
+then run this installer again; the panel settings are kept."
+fi
+# Its settings carry over
+for ext in toml env; do
+	if [ -e "$CONFIG_DIR/klipper-helm.$ext" ] && [ ! -e "$CONFIG_DIR/klip-boy.$ext" ]; then
+		cp "$CONFIG_DIR/klipper-helm.$ext" "$CONFIG_DIR/klip-boy.$ext"
+		say "Settings copied from klipper-helm.$ext"
+	fi
+done
 
 # Moonraker refuses to update an application that lives inside a git repository
 if [ -d "$DIR/.git" ]; then
@@ -235,20 +250,20 @@ mv "$DIR/$ASSET.tmp" "$DIR/$ASSET"
 # Tells Moonraker's update manager what is installed (it rewrites the version on updates)
 cat >"$DIR/release_info.json" <<EOF
 {
-  "project_name": "klipper-helm",
+  "project_name": "klip-boy",
   "project_owner": "${REPO%%/*}",
   "version": "$VERSION",
   "asset_name": "$ASSET"
 }
 EOF
-say "Klipper Helm $VERSION installed in $DIR"
+say "Klip-Boy $VERSION installed in $DIR"
 
 # Settings the panel cannot change itself; editable from Mainsail like printer.cfg
-if [ ! -e "$CONFIG_DIR/klipper-helm.env" ]; then
-	cat >"$CONFIG_DIR/klipper-helm.env" <<'EOF'
-# Klipper Helm: settings applied when the panel starts. Restart it after changes
-# (Mainsail: the power menu, or `sudo systemctl restart klipper-helm`).
-# Everything else is set on the panel (System -> Panel settings) and saved in klipper-helm.toml.
+if [ ! -e "$CONFIG_DIR/klip-boy.env" ]; then
+	cat >"$CONFIG_DIR/klip-boy.env" <<'EOF'
+# Klip-Boy: settings applied when the panel starts. Restart it after changes
+# (Mainsail: the power menu, or `sudo systemctl restart klip-boy`).
+# Everything else is set on the panel (System -> Panel settings) and saved in klip-boy.toml.
 
 # Screen rotation: 0, 90, 180 or 270
 #SLINT_KMS_ROTATION=180
@@ -258,10 +273,10 @@ if [ ! -e "$CONFIG_DIR/klipper-helm.env" ]; then
 EOF
 fi
 
-say "Installing the klipper-helm service"
+say "Installing the klip-boy service"
 sudo tee "$SERVICE" >/dev/null <<EOF
 [Unit]
-Description=Klipper Helm touch screen panel
+Description=Klip-Boy touch screen panel
 Documentation=https://github.com/$REPO
 After=moonraker.service
 Wants=moonraker.service
@@ -274,10 +289,10 @@ Before=plymouth-quit.service plymouth-quit-wait.service
 Type=simple
 User=$USER
 SupplementaryGroups=video input render
-Environment=KLIPPER_HELM_CONFIG=$CONFIG_DIR/klipper-helm.toml
-Environment=KLIPPER_HELM_MANAGE_NETWORK=1
+Environment=KLIP_BOY_CONFIG=$CONFIG_DIR/klip-boy.toml
+Environment=KLIP_BOY_MANAGE_NETWORK=1
 EnvironmentFile=-/etc/default/locale
-EnvironmentFile=-$CONFIG_DIR/klipper-helm.env
+EnvironmentFile=-$CONFIG_DIR/klip-boy.env
 # Ends the boot splash but keeps the logo on screen until the panel's first frame;
 # as root ("+"), the only user Plymouth listens to, and ignored without Plymouth ("-")
 ExecStartPre=-+/usr/bin/plymouth quit --retain-splash
@@ -295,7 +310,7 @@ EOF
 # Network screen: lets this user change NetworkManager's settings without a login session
 if command -v nmcli >/dev/null && systemctl is-active --quiet NetworkManager; then
 	sudo tee "$POLKIT_RULE" >/dev/null <<EOF
-// Klipper Helm (running as $USER) may change NetworkManager settings from the panel
+// Klip-Boy (running as $USER) may change NetworkManager settings from the panel
 polkit.addRule(function(action, subject) {
     if (action.id.indexOf("org.freedesktop.NetworkManager.") == 0 && subject.user == "$USER") {
         return polkit.Result.YES;
@@ -315,11 +330,11 @@ type: executable
 channel: stable
 repo: $REPO
 path: $DIR
-managed_services: klipper-helm
+managed_services: klip-boy
 EOF
 fi
-if [ -f "$ASVC" ] && ! grep -qx klipper-helm "$ASVC"; then
-	echo klipper-helm >>"$ASVC"
+if [ -f "$ASVC" ] && ! grep -qx klip-boy "$ASVC"; then
+	echo klip-boy >>"$ASVC"
 fi
 
 # Only one program can draw on the screen; --uninstall brings KlipperScreen back
@@ -335,7 +350,7 @@ if [ "$BOOT_SPLASH" = 1 ]; then
 fi
 
 sudo systemctl daemon-reload
-sudo systemctl enable klipper-helm.service
+sudo systemctl enable klip-boy.service
 sudo systemctl restart moonraker.service
-sudo systemctl restart klipper-helm.service
-say "Done. Klipper Helm is running; updates appear in Mainsail's update manager."
+sudo systemctl restart klip-boy.service
+say "Done. Klip-Boy is running; updates appear in Mainsail's update manager."

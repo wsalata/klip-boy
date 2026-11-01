@@ -76,7 +76,7 @@ export component UpdatePage inherits Rectangle {
                     VerticalLayout {
                         alignment: center;
                         horizontal-stretch: 1;
-                        Caption { text: @tr("Klipper Helm {}", Printer.panel-version); }
+                        Caption { text: @tr("Klip-Boy {}", Printer.panel-version); }
                         Text {
                             text: Update.error != "" ? Update.error
                                 : Update.busy ? (Update.message != "" ? Update.message : @tr("Working..."))

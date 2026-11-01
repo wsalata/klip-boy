@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: klipper-helm\n"
+"Project-Id-Version: klip-boy\n"
 "PO-Revision-Date: 2026-11-01 23:10+0100\n"
 "Last-Translator: Walery Salata\n"
 "Language-Team: Polish\n"
@@ -559,8 +559,8 @@ msgstr "{} · aktualne"
 msgid "Update"
 msgstr "Aktualizuj"
 
-msgid "Klipper Helm {}"
-msgstr "Klipper Helm {}"
+msgid "Klip-Boy {}"
+msgstr "Klip-Boy {}"
 
 msgid "Working..."
 msgstr "Trwa praca..."

@@ -5,7 +5,7 @@ use anyhow::{Context, bail};
 use std::time::Duration;
 
 const FILE: &str = "printer.cfg";
-const BOUNDARY: &str = "klipper-helm-7f3a9c2e51d84b06";
+const BOUNDARY: &str = "klip-boy-7f3a9c2e51d84b06";
 
 /// Sets `option` in `[section]` of printer.cfg on the printer (`base`: Moonraker's HTTP address).
 /// Ok(false) when printer.cfg does not hold that option exactly once (e.g. the section lives in an
