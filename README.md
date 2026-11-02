@@ -1,7 +1,14 @@
 # Klip-Boy
 
+![Klip-Boy: a retro-futuristic touch screen panel for Klipper](docs/banner.png)
+
 A touch screen panel for Klipper/Moonraker, a KlipperScreen replacement written in Rust + Slint.
 On a Raspberry Pi it draws directly through KMS/DRM (no X11/Wayland); on a PC it runs in a window.
+
+| | |
+|---|---|
+| ![Status: remaining time, temperatures and progress during a print](docs/screenshots/status.png) | ![Temperature: heaters, fans and presets](docs/screenshots/temperature.png) |
+| ![Filament: changing the spool and manual extrusion](docs/screenshots/filament.png) | ![Bed mesh: height map and saved profiles](docs/screenshots/bed-mesh.png) |
 
 ## Screens
 

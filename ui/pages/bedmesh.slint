@@ -69,7 +69,8 @@ export component BedMeshPage inherits Rectangle {
                 padding: 12px;
                 spacing: Theme.gap;
 
-                HorizontalLayout {
+                // One under another: side by side they do not fit in the narrow card
+                VerticalLayout {
                     spacing: Theme.gap;
                     Btn {
                         text: @tr("Calibrate");
