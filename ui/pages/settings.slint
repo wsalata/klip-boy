@@ -1,7 +1,7 @@
 import { Theme } from "../theme.slint";
-import { Overlay, Settings, Strings } from "../state.slint";
+import { Overlay, Settings, Strings, Screensaver } from "../state.slint";
 import { Btn, BtnKind, Card, Caption, SettingRow } from "../widgets.slint";
-import { ScrollView } from "std-widgets.slint";
+import { ScrollView, ListView } from "std-widgets.slint";
 
 // Cancel and Save for the panel settings (also used by the Presets page, saved with them), and
 // the error from the last save.
@@ -11,8 +11,8 @@ export component SaveBar inherits VerticalLayout {
         spacing: Theme.gap;
         alignment: end;
         // Back to the saved values
-        Btn { text: @tr("Cancel"); kind: BtnKind.ghost; width: 120px; clicked => { Settings.load(); } }
-        Btn { text: @tr("Save"); kind: BtnKind.accent; width: 120px; clicked => { Settings.save(); } }
+        Btn { text: @tr("Cancel"); kind: BtnKind.ghost; width: 150px; clicked => { Settings.load(); } }
+        Btn { text: @tr("Save"); kind: BtnKind.accent; width: 150px; clicked => { Settings.save(); } }
     }
     if Settings.error-code != "": Text {
         text: Strings.settings-error(Settings.error-code, Settings.error-arg);
@@ -22,7 +22,62 @@ export component SaveBar inherits VerticalLayout {
     }
 }
 
+// One language in the picker, like a Wi-Fi network row: the chosen one is lit and marked.
+component LanguageRow inherits Rectangle {
+    in property <string> name;
+    in property <string> code;
+    in property <bool> current;
+    callback clicked();
+    height: 42px;
+    background: ta.pressed ? Theme.surface-2 : root.current ? Theme.accent.transparentize(0.88) : transparent;
+    accessible-role: button;
+    accessible-label: root.name;
+    accessible-action-default => { root.clicked(); }
+
+    if root.current: Rectangle { x: 0; width: 3px; background: Theme.accent; }
+    HorizontalLayout {
+        padding-left: 14px;
+        padding-right: 14px;
+        Text {
+            text: root.name;
+            color: root.current ? Theme.accent : Theme.text;
+            font-weight: root.current ? 700 : 400;
+            vertical-alignment: center;
+            horizontal-stretch: 1;
+        }
+        // Language code; none for the system default
+        if root.code != "auto": Caption { text: root.code.to-uppercase(); horizontal-stretch: 0; }
+    }
+    Rectangle { y: parent.height - 1px; height: 1px; background: Theme.border; }
+    ta := TouchArea {
+        pointer-event(e) => { if (e.kind == PointerEventKind.down) { Screensaver.activity(); } }
+        clicked => { root.clicked(); }
+    }
+}
+
 export component SettingsPage inherits Rectangle {
+    // Language names are written in their own language, so they are not translated
+    property <[{ code: string, name: string }]> languages: [
+        { code: "auto", name: @tr("System") },
+        { code: "cs", name: "Čeština" },
+        { code: "de", name: "Deutsch" },
+        { code: "en", name: "English" },
+        { code: "fr", name: "Français" },
+        { code: "it", name: "Italiano" },
+        { code: "pl", name: "Polski" },
+    ];
+    property <bool> choosing-language;
+
+    pure function language-name(code: string) -> string {
+        if (code == "cs") { return "Čeština"; }
+        if (code == "de") { return "Deutsch"; }
+        if (code == "en") { return "English"; }
+        if (code == "fr") { return "Français"; }
+        if (code == "it") { return "Italiano"; }
+        if (code == "pl") { return "Polski"; }
+        return @tr("System");
+    }
+
     VerticalLayout {
         padding: Theme.gap;
         spacing: Theme.gap;
@@ -57,21 +112,10 @@ export component SettingsPage inherits Rectangle {
                         value: round(Settings.z-speed) + " mm/s";
                         clicked => { Overlay.ask-number("z", @tr("Z speed [mm/s]"), Settings.z-speed, " mm/s"); }
                     }
-                    Caption { text: @tr("Language"); }
-                    HorizontalLayout {
-                        spacing: 4px;
-                        // Language names are written in their own language, so they are not translated
-                        for lang in [
-                            { code: "auto", name: @tr("System") },
-                            { code: "en", name: "English" },
-                            { code: "pl", name: "Polski" },
-                        ]: Btn {
-                            text: lang.name;
-                            font-size: Theme.font-s;
-                            min-height: 44px;
-                            active: Settings.language == lang.code;
-                            clicked => { Settings.language = lang.code; }
-                        }
+                    SettingRow {
+                        label: @tr("Language");
+                        value: root.language-name(Settings.language);
+                        clicked => { root.choosing-language = true; }
                     }
                     Caption { text: @tr("Screen saver"); }
                     HorizontalLayout {
@@ -96,6 +140,35 @@ export component SettingsPage inherits Rectangle {
                         font-size: 12px;
                     }
                 }
+                }
+            }
+        }
+    }
+
+    if root.choosing-language: Rectangle {
+        background: Theme.scrim;
+        TouchArea { clicked => { root.choosing-language = false; } }
+        Card {
+            width: min(root.width - 2 * Theme.gap, 420px);
+            height: picker.preferred-height;
+            background: Theme.surface;
+            TouchArea {}  // swallows taps so they do not close the picker
+            picker := VerticalLayout {
+                padding: 14px;
+                spacing: 6px;
+                Caption { text: @tr("Language"); }
+                // A list as for Wi-Fi networks; scrolls when the screen is too short
+                ListView {
+                    height: min(root.languages.length * 42px, root.height - 2 * Theme.gap - 60px);
+                    for lang in root.languages: LanguageRow {
+                        name: lang.name;
+                        code: lang.code;
+                        current: Settings.language == lang.code;
+                        clicked => {
+                            Settings.language = lang.code;
+                            root.choosing-language = false;
+                        }
+                    }
                 }
             }
         }

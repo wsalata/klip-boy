@@ -262,5 +262,6 @@ find ui -name '*.slint' | xargs slint-tr-extractor --no-default-translation-cont
 msgmerge -U ui/translations/pl/LC_MESSAGES/klip-boy.po klip-boy.pot
 ```
 
-A new language is a new directory, e.g. `ui/translations/de/LC_MESSAGES/klip-boy.po`, plus an entry in
-`LANGUAGES` (`src/config.rs`) and a button in `ui/pages/settings.slint`.
+Included: Czech, English, French, German, Italian and Polish. A new language is a new directory, e.g.
+`ui/translations/es/LC_MESSAGES/klip-boy.po`, plus an entry in `LANGUAGES` (`src/config.rs`) and a
+button in `ui/pages/settings.slint`. The bundled font covers Latin scripts only (no Greek or Cyrillic).

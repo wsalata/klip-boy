@@ -3,13 +3,13 @@ use std::path::PathBuf;
 
 const DEFAULT_URL: &str = "ws://127.0.0.1:7125/websocket";
 /// UI languages selectable in the settings ("auto" follows the system locale)
-pub const LANGUAGES: [&str; 3] = ["auto", "en", "pl"];
+pub const LANGUAGES: [&str; 7] = ["auto", "cs", "de", "en", "fr", "it", "pl"];
 
 #[derive(Debug, Clone, PartialEq, Deserialize, Serialize)]
 #[serde(default)]
 pub struct Config {
     pub moonraker_url: String,
-    /// "auto", "en" or "pl"
+    /// "auto" or one of LANGUAGES
     pub language: String,
     /// Manual XY movement speed [mm/s]
     pub xy_speed: f32,
@@ -167,7 +167,7 @@ mod tests {
         cfg.z_speed = 0.0;
         assert_eq!(cfg.validate().unwrap_err(), ConfigError::new("speed", "Z"));
         let mut cfg = valid();
-        cfg.language = "de".into();
+        cfg.language = "xx".into();
         assert_eq!(cfg.validate().unwrap_err().code, "language");
     }
 }

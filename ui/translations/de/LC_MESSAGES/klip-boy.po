@@ -1,0 +1,764 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: klip-boy\n"
+"PO-Revision-Date: 2026-11-02 23:30+0100\n"
+"Last-Translator: Walery Salata\n"
+"Language-Team: German\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Temperature"
+msgstr "Temperatur"
+
+msgid "Move"
+msgstr "Bewegen"
+
+msgid "Filament"
+msgstr "Filament"
+
+msgid "Files"
+msgstr "Dateien"
+
+msgid "Macros"
+msgstr "Makros"
+
+msgid "Console"
+msgstr "Konsole"
+
+msgid "System"
+msgstr "System"
+
+msgid "Network"
+msgstr "Netzwerk"
+
+msgid "Updates"
+msgstr "Updates"
+
+msgid "Home"
+msgstr "Start"
+
+msgid "Emergency stop"
+msgstr "Not-Aus"
+
+msgid "Cancel"
+msgstr "Abbrechen"
+
+msgid "Set"
+msgstr "Setzen"
+
+msgid "Delete"
+msgstr "Löschen"
+
+msgid "space"
+msgstr "Leerzeichen"
+
+msgid "No"
+msgstr "Nein"
+
+msgid "Yes"
+msgstr "Ja"
+
+msgid "Estimated time"
+msgstr "Geschätzte Zeit"
+
+msgid "Layer height"
+msgstr "Schichthöhe"
+
+msgid "Slicer"
+msgstr "Slicer"
+
+msgid "Close"
+msgstr "Schließen"
+
+msgid "Print"
+msgstr "Drucken"
+
+msgid "Connection settings"
+msgstr "Verbindung einrichten"
+
+msgid "Restart"
+msgstr "Neustart"
+
+msgid "Firmware restart"
+msgstr "Firmware-Neustart"
+
+msgid "Tune"
+msgstr "Anpassen"
+
+msgid "Print speed"
+msgstr "Druckgeschwindigkeit"
+
+msgid "Speed"
+msgstr "Tempo"
+
+msgid "Flow"
+msgstr "Fluss"
+
+msgid "Z offset"
+msgstr "Z-Offset"
+
+msgid "Part cooling"
+msgstr "Bauteilkühlung"
+
+msgid "Type a G-code command..."
+msgstr "G-Code-Befehl eingeben..."
+
+msgid "Send"
+msgstr "Senden"
+
+msgid "Paused, remaining"
+msgstr "Pausiert, verbleibend"
+
+msgid "Remaining"
+msgstr "Verbleibend"
+
+msgid "finishes around {}"
+msgstr "fertig gegen {}"
+
+msgid "layer {} · Z {}"
+msgstr "Schicht {} · Z {}"
+
+msgid "print time · filament {}"
+msgstr "Druckzeit · Filament {}"
+
+msgid "State"
+msgstr "Zustand"
+
+msgid "Pause"
+msgstr "Pause"
+
+msgid "Resume"
+msgstr "Fortsetzen"
+
+msgid "Cancel the current print?"
+msgstr "Laufenden Druck abbrechen?"
+
+msgid "Print again"
+msgstr "Erneut drucken"
+
+msgid "Nozzle {}°"
+msgstr "Düse {}°"
+
+msgid "Too cold to extrude (min. 170°)"
+msgstr "Zu kalt zum Extrudieren (min. 170°)"
+
+msgid "Length [mm]"
+msgstr "Länge [mm]"
+
+msgid "Speed [mm/s]"
+msgstr "Tempo [mm/s]"
+
+msgid "Filament change"
+msgstr "Filamentwechsel"
+
+msgid "Fans"
+msgstr "Lüfter"
+
+msgid "G-code files ({})"
+msgstr "G-Code-Dateien ({})"
+
+msgid "Refresh"
+msgstr "Neu laden"
+
+msgid "No files"
+msgstr "Keine Dateien"
+
+msgid "No macros (gcode_macro without a _ prefix)"
+msgstr "Keine Makros (gcode_macro ohne Präfix _)"
+
+msgid "Run macro {}?"
+msgstr "Makro {} ausführen?"
+
+msgid "{}  (not homed)"
+msgstr "{}  (nicht referenziert)"
+
+msgid "Step [mm]"
+msgstr "Schritt [mm]"
+
+msgid "Motors off"
+msgstr "Motoren aus"
+
+msgid "Connected"
+msgstr "Verbunden"
+
+msgid "Saved"
+msgstr "Gespeichert"
+
+msgid "Forget the network {}?"
+msgstr "Netzwerk {} vergessen?"
+
+msgid "Join the open network {}?"
+msgstr "Offenem Netzwerk {} beitreten?"
+
+msgid "Status only: network changes are disabled on this system"
+msgstr "Nur Anzeige: Netzwerkänderungen sind auf diesem System deaktiviert"
+
+msgid "no port"
+msgstr "kein Anschluss"
+
+msgid "no cable"
+msgstr "kein Kabel"
+
+msgid "getting an address..."
+msgstr "Adresse wird bezogen..."
+
+msgid "Static address"
+msgstr "Feste Adresse"
+
+msgid "IP address"
+msgstr "IP-Adresse"
+
+msgid "IP address (e.g. 192.168.1.20/24)"
+msgstr "IP-Adresse (z. B. 192.168.1.20/24)"
+
+msgid "Gateway"
+msgstr "Gateway"
+
+msgid "Gateway (e.g. 192.168.1.1)"
+msgstr "Gateway (z. B. 192.168.1.1)"
+
+msgid "DNS servers (e.g. 192.168.1.1 1.1.1.1)"
+msgstr "DNS-Server (z. B. 192.168.1.1 1.1.1.1)"
+
+msgid "Apply"
+msgstr "Anwenden"
+
+msgid "no adapter"
+msgstr "kein Adapter"
+
+msgid "Hidden network"
+msgstr "Versteckt"
+
+msgid "Scanning..."
+msgstr "Suche..."
+
+msgid "Scan"
+msgstr "Suchen"
+
+msgid "No Wi-Fi adapter. Plug in a USB Wi-Fi adapter to use wireless networks."
+msgstr "Kein WLAN-Adapter. Für Funknetze einen USB-WLAN-Adapter anschließen."
+
+msgid "Looking for networks..."
+msgstr "Netzwerke werden gesucht..."
+
+msgid "No networks found"
+msgstr "Keine Netzwerke gefunden"
+
+msgid "Preset name"
+msgstr "Name der Vorgabe"
+
+msgid "{} - nozzle"
+msgstr "{} - Düse"
+
+msgid "{} - bed"
+msgstr "{} - Bett"
+
+msgid "Save"
+msgstr "Speichern"
+
+msgid "Connection"
+msgstr "Verbindung"
+
+msgid "Moonraker address (ws://host:7125/websocket)"
+msgstr "Moonraker-Adresse (ws://host:7125/websocket)"
+
+msgid "Manual movement"
+msgstr "Manuelle Bewegung"
+
+msgid "XY speed"
+msgstr "Tempo XY"
+
+msgid "XY speed [mm/s]"
+msgstr "Tempo XY [mm/s]"
+
+msgid "Z speed"
+msgstr "Tempo Z"
+
+msgid "Z speed [mm/s]"
+msgstr "Tempo Z [mm/s]"
+
+msgid "Language"
+msgstr "Sprache"
+
+msgid "File: {}"
+msgstr "Datei: {}"
+
+msgid "Presets (name, nozzle, bed)"
+msgstr "Vorgaben (Name, Düse, Bett)"
+
+msgid "+ Add"
+msgstr "+ Neu"
+
+msgid "New"
+msgstr "Neu"
+
+msgid "Information"
+msgstr "Info"
+
+msgid "Host"
+msgstr "Host"
+
+msgid "Restart Klipper?"
+msgstr "Klipper neu starten?"
+
+msgid "Restart the firmware (MCU)?"
+msgstr "Firmware (MCU) neu starten?"
+
+msgid "Computer"
+msgstr "Computer"
+
+msgid "Reboot"
+msgstr "Neu starten"
+
+msgid "Reboot the printer computer?"
+msgstr "Druckercomputer neu starten?"
+
+msgid "Shut down"
+msgstr "Herunterfahren"
+
+msgid "Shut down the printer computer?"
+msgstr "Druckercomputer herunterfahren?"
+
+msgid "off"
+msgstr "aus"
+
+msgid "Presets"
+msgstr "Vorgaben"
+
+msgid "Heaters off"
+msgstr "Heizung aus"
+
+msgid "Connecting..."
+msgstr "Verbinde..."
+
+msgid "No connection"
+msgstr "Keine Verbindung"
+
+msgid "Klipper is starting"
+msgstr "Klipper startet"
+
+msgid "Klipper shut down"
+msgstr "Klipper gestoppt"
+
+msgid "Klipper error"
+msgstr "Klipper-Fehler"
+
+msgid "Connecting to Klipper..."
+msgstr "Verbinde mit Klipper..."
+
+msgid "Klipper unavailable"
+msgstr "Klipper nicht verfügbar"
+
+msgid "Busy"
+msgstr "Beschäftigt"
+
+msgid "Printing"
+msgstr "Druckt"
+
+msgid "Paused"
+msgstr "Pausiert"
+
+msgid "Complete"
+msgstr "Fertig"
+
+msgid "Cancelled"
+msgstr "Abgebrochen"
+
+msgid "Print error"
+msgstr "Druckfehler"
+
+msgid "Ready"
+msgstr "Bereit"
+
+msgid "Cannot connect to Moonraker ({})"
+msgstr "Keine Verbindung zu Moonraker ({})"
+
+msgid "Nozzle {}"
+msgstr "Düse {}"
+
+msgid "Nozzle"
+msgstr "Düse"
+
+msgid "Bed"
+msgstr "Bett"
+
+msgid "Not connected"
+msgstr "Nicht verbunden"
+
+msgid "Invalid IP address: {} (e.g. 192.168.1.20/24)"
+msgstr "Ungültige IP-Adresse: {} (z. B. 192.168.1.20/24)"
+
+msgid "Invalid gateway: {}"
+msgstr "Ungültiges Gateway: {}"
+
+msgid "Invalid DNS server: {}"
+msgstr "Ungültiger DNS-Server: {}"
+
+msgid "Could not save settings: {}"
+msgstr "Einstellungen nicht gespeichert: {}"
+
+msgid "Could not apply the change: {}"
+msgstr "Änderung nicht übernommen: {}"
+
+msgid "Moonraker address must start with ws:// or wss:// and contain no spaces"
+msgstr "Die Moonraker-Adresse muss mit ws:// oder wss:// beginnen und darf keine Leerzeichen enthalten"
+
+msgid "{} speed must be between 0.1 and 1000 mm/s"
+msgstr "Tempo {} muss zwischen 0,1 und 1000 mm/s liegen"
+
+msgid "Every preset needs a name"
+msgstr "Jede Vorgabe braucht einen Namen"
+
+msgid "Preset {}: temperature out of range"
+msgstr "Vorgabe {}: Temperatur außerhalb des Bereichs"
+
+msgid "No connection to Moonraker"
+msgstr "Keine Verbindung zu Moonraker"
+
+msgid "Settings saved"
+msgstr "Einstellungen gespeichert"
+
+msgid "{} - target temperature"
+msgstr "{} - Zieltemperatur"
+
+msgid "Password for {}"
+msgstr "Passwort für {}"
+
+msgid "Hidden network name (SSID)"
+msgstr "Name des versteckten Netzes (SSID)"
+
+msgid "Password for {} (empty for an open network)"
+msgstr "Passwort für {} (leer für ein offenes Netz)"
+
+msgid "Decrease {}"
+msgstr "{} verringern"
+
+msgid "Increase {}"
+msgstr "{} erhöhen"
+
+msgid "Probe offset (e.g. BLTouch)"
+msgstr "Sonden-Offset (z. B. BLTouch)"
+
+msgid "Z endstop position"
+msgstr "Position des Z-Endstopps"
+
+msgid "Too low: {} mm · too high: {} mm"
+msgstr "Zu tief: {} mm · zu hoch: {} mm"
+
+msgid "Lower the nozzle until a sheet of paper under it slides with slight friction, then press Accept."
+msgstr "Die Düse absenken, bis ein Blatt Papier darunter mit leichtem Widerstand gleitet, dann Übernehmen drücken."
+
+msgid "Heat the nozzle and the bed to printing temperature first. The printer homes if needed, moves to the middle of the bed and starts the paper test."
+msgstr "Zuerst Düse und Bett auf Drucktemperatur heizen. Der Drucker referenziert bei Bedarf, fährt zur Bettmitte und startet den Papiertest."
+
+msgid "The new value is ready. Saving it writes the printer configuration and restarts Klipper."
+msgstr "Der neue Wert ist bereit. Speichern schreibt die Druckerkonfiguration und startet Klipper neu."
+
+msgid "Save and restart"
+msgstr "Speichern und neu starten"
+
+msgid "Save the configuration and restart Klipper?"
+msgstr "Konfiguration speichern und Klipper neu starten?"
+
+msgid "Start calibration"
+msgstr "Kalibrierung starten"
+
+msgid "Raise nozzle"
+msgstr "Düse anheben"
+
+msgid "Lower nozzle"
+msgstr "Düse absenken"
+
+msgid "Abort"
+msgstr "Abbrechen"
+
+msgid "Accept"
+msgstr "Übernehmen"
+
+msgid "Calibration"
+msgstr "Kalibrierung"
+
+msgid "Name of the new mesh profile"
+msgstr "Name des neuen Mesh-Profils"
+
+msgid "No mesh loaded"
+msgstr "Kein Mesh geladen"
+
+msgid "Profile: {}"
+msgstr "Profil: {}"
+
+msgid "Range: {}"
+msgstr "Spanne: {}"
+
+msgid "Lowest: {}"
+msgstr "Tiefster: {}"
+
+msgid "Highest: {}"
+msgstr "Höchster: {}"
+
+msgid "Heat the bed to printing temperature, then press Calibrate. The printer homes if needed and probes the bed; the result is kept as the \"default\" profile."
+msgstr "Das Bett auf Drucktemperatur heizen, dann Kalibrieren drücken. Der Drucker referenziert bei Bedarf und tastet das Bett ab; das Ergebnis wird als Profil \"default\" behalten."
+
+msgid "Bed mesh is not configured in Klipper ([bed_mesh] section)."
+msgstr "Bett-Mesh ist in Klipper nicht konfiguriert (Abschnitt [bed_mesh])."
+
+msgid "Calibrate"
+msgstr "Kalibrieren"
+
+msgid "New profile"
+msgstr "Neues Profil"
+
+msgid "Profiles"
+msgstr "Profile"
+
+msgid "No saved profiles"
+msgstr "Keine gespeicherten Profile"
+
+msgid "Load profile {}"
+msgstr "Profil {} laden"
+
+msgid "Delete the mesh profile {}?"
+msgstr "Mesh-Profil {} löschen?"
+
+msgid "Unload mesh"
+msgstr "Mesh entladen"
+
+msgid "Screen saver"
+msgstr "Bildschirmschoner"
+
+msgid "Off"
+msgstr "Aus"
+
+msgid "{} min"
+msgstr "{} min"
+
+msgid "Wi-Fi is off or not managed by NetworkManager"
+msgstr "WLAN ist aus oder wird nicht von NetworkManager verwaltet"
+
+msgid "System packages"
+msgstr "Systempakete"
+
+msgid "{} packages to update"
+msgstr "{} Pakete zu aktualisieren"
+
+msgid "Up to date"
+msgstr "Aktuell"
+
+msgid "{} · installation not recognised, see Mainsail"
+msgstr "{} · Installation nicht erkannt, siehe Mainsail"
+
+msgid "{} · update available"
+msgstr "{} · Update verfügbar"
+
+msgid "{} · up to date"
+msgstr "{} · aktuell"
+
+msgid "Update"
+msgstr "Aktualisieren"
+
+msgid "Klip-Boy {}"
+msgstr "Klip-Boy {}"
+
+msgid "Working..."
+msgstr "Läuft..."
+
+msgid "Not available while printing"
+msgstr "Während des Drucks nicht verfügbar"
+
+msgid "Moonraker's update manager is not available."
+msgstr "Der Update-Manager von Moonraker ist nicht verfügbar."
+
+msgid "Check"
+msgstr "Prüfen"
+
+msgid "Update all"
+msgstr "Alle aktualisieren"
+
+msgid "Update everything? Klipper and Moonraker restart during the update."
+msgstr "Alles aktualisieren? Klipper und Moonraker starten während des Updates neu."
+
+msgid "Bed screws"
+msgstr "Bettschrauben"
+
+msgid "Gantry"
+msgstr "Portal"
+
+msgid "Bed tilt"
+msgstr "Bettneigung"
+
+msgid "Screw {}"
+msgstr "Schraube {}"
+
+msgid "Reference"
+msgstr "Referenz"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "Clockwise {}"
+msgstr "Im Uhrzeigersinn {}"
+
+msgid "Counter-clockwise {}"
+msgstr "Gegen den Uhrzeigersinn {}"
+
+msgid "Bed levelling is not configured in Klipper ([screws_tilt_adjust], [bed_screws], [z_tilt] or [quad_gantry_level] section)."
+msgstr "Bettnivellierung ist in Klipper nicht konfiguriert (Abschnitt [screws_tilt_adjust], [bed_screws], [z_tilt] oder [quad_gantry_level])."
+
+msgid "Fine adjustment"
+msgstr "Feineinstellung"
+
+msgid "Coarse adjustment"
+msgstr "Grobeinstellung"
+
+msgid "Turn the screw until a sheet of paper under the nozzle slides with slight friction. Press Adjusted if you turned it, Accept if it was already right."
+msgstr "Die Schraube drehen, bis ein Blatt Papier unter der Düse mit leichtem Widerstand gleitet. Angepasst drücken, wenn gedreht wurde, Übernehmen, wenn sie schon stimmte."
+
+msgid "Heat the bed to printing temperature, then press Measure. The probe checks the bed at each screw and shows how far to turn it."
+msgstr "Das Bett auf Drucktemperatur heizen, dann Messen drücken. Die Sonde prüft das Bett an jeder Schraube und zeigt, wie weit sie zu drehen ist."
+
+msgid "The screws differ more than allowed (max. {} mm)."
+msgstr "Die Schrauben weichen mehr als erlaubt ab (max. {} mm)."
+
+msgid "01:15 means one full turn and a quarter. Measure again after turning the screws."
+msgstr "01:15 bedeutet eine volle Umdrehung und ein Viertel. Nach dem Drehen erneut messen."
+
+msgid "Heat the bed to printing temperature first. The nozzle stops over each screw in turn for the paper test."
+msgstr "Zuerst das Bett auf Drucktemperatur heizen. Die Düse hält nacheinander über jeder Schraube für den Papiertest."
+
+msgid "Levelled since Klipper started."
+msgstr "Seit dem Start von Klipper nivelliert."
+
+msgid "Not levelled since Klipper started. The Z motors are adjusted using the probe, then Z is homed again."
+msgstr "Seit dem Start von Klipper nicht nivelliert. Die Z-Motoren werden mit der Sonde ausgerichtet, dann wird Z neu referenziert."
+
+msgid "Adjusted"
+msgstr "Angepasst"
+
+msgid "Measure"
+msgstr "Messen"
+
+msgid "Adjust screws"
+msgstr "Schrauben einstellen"
+
+msgid "Level bed tilt"
+msgstr "Neigung ausgleichen"
+
+msgid "Level gantry"
+msgstr "Portal nivellieren"
+
+msgid "Heater"
+msgstr "Heizung"
+
+msgid "Calibrating"
+msgstr "Kalibriert"
+
+msgid "No heaters found."
+msgstr "Keine Heizungen gefunden."
+
+msgid "The heater is heated to the target and its response is measured, so that it holds the temperature steadily. It takes a few minutes; use your usual printing temperature."
+msgstr "Die Heizung wird auf das Ziel geheizt und ihr Verhalten gemessen, damit sie die Temperatur stabil hält. Das dauert einige Minuten; die übliche Drucktemperatur verwenden."
+
+msgid "Target"
+msgstr "Ziel"
+
+msgid "Wait until Klipper reports the result. The emergency stop interrupts the calibration."
+msgstr "Warten, bis Klipper das Ergebnis meldet. Der Not-Aus unterbricht die Kalibrierung."
+
+msgid "Extruder"
+msgstr "Extruder"
+
+msgid "Filament left above the extruder"
+msgstr "Filament über dem Extruder"
+
+msgid "Heat the nozzle to the printing temperature."
+msgstr "Die Düse auf Drucktemperatur heizen."
+
+msgid "Heat to {}°"
+msgstr "Heizen auf {}°"
+
+msgid "Mark the filament {} mm above the extruder entry."
+msgstr "Das Filament {} mm über dem Extrudereingang markieren."
+
+msgid "Extrude {} mm slowly. Too cold to extrude (min. {}°)."
+msgstr "{} mm langsam extrudieren. Zu kalt zum Extrudieren (min. {}°)."
+
+msgid "Extrude {} mm slowly (about 2 minutes) and wait until the motor stops."
+msgstr "{} mm langsam extrudieren (etwa 2 Minuten) und warten, bis der Motor steht."
+
+msgid "Extrude {} mm"
+msgstr "{} mm fördern"
+
+msgid "Measure the filament left between the extruder entry and the mark."
+msgstr "Das Filament zwischen Extrudereingang und Markierung messen."
+
+msgid "Left to the mark"
+msgstr "Rest bis zur Markierung"
+
+msgid "Rotation distance"
+msgstr "Rotation distance"
+
+msgid "No rotation_distance in the [extruder] section of the Klipper config."
+msgstr "Kein rotation_distance im Abschnitt [extruder] der Klipper-Konfiguration."
+
+msgid "Current"
+msgstr "Aktuell"
+
+msgid "Extruded"
+msgstr "Extrudiert"
+
+msgid "This is more than 30% off; check the mark and measure again."
+msgstr "Das weicht über 30 % ab; Markierung prüfen und erneut messen."
+
+msgid "In use until Klipper restarts; printer.cfg still has {}."
+msgstr "Gilt bis zum Neustart von Klipper; printer.cfg enthält noch {}."
+
+msgid "Saving..."
+msgstr "Speichern..."
+
+msgid "Saved in printer.cfg."
+msgstr "In printer.cfg gespeichert."
+
+msgid "printer.cfg has no rotation_distance in [extruder] (it may be in an included file). Set it to {} there."
+msgstr "printer.cfg hat kein rotation_distance in [extruder] (vielleicht in einer eingebundenen Datei). Dort auf {} setzen."
+
+msgid "Could not save: {}"
+msgstr "Speichern fehlgeschlagen: {}"
+
+msgid "Save in printer.cfg"
+msgstr "In printer.cfg speichern"
+
+msgid "Write rotation_distance: {} into printer.cfg?"
+msgstr "rotation_distance: {} in printer.cfg schreiben?"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Control"
+msgstr "Steuerung"
+
+msgid "Settings"
+msgstr "Optionen"
+
+msgid "Mesh"
+msgstr "Mesh"
+
+msgid "Heat the nozzle"
+msgstr "Düse heizen"
+
+msgid "No LOAD_FILAMENT / UNLOAD_FILAMENT macro in the Klipper config."
+msgstr "Kein Makro LOAD_FILAMENT / UNLOAD_FILAMENT in der Klipper-Konfiguration."
+
+msgid "Manual extrusion"
+msgstr "Manuelles Extrudieren"
+
+msgid "Retract {} mm"
+msgstr "{} mm zurückziehen"
+
+msgid "Load"
+msgstr "Laden"
+
+msgid "Unload"
+msgstr "Entladen"

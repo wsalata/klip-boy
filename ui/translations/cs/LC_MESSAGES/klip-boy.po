@@ -1,0 +1,764 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: klip-boy\n"
+"PO-Revision-Date: 2026-11-02 23:30+0100\n"
+"Last-Translator: Walery Salata\n"
+"Language-Team: Czech\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: cs\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+msgid "Temperature"
+msgstr "Teplota"
+
+msgid "Move"
+msgstr "Pohyb"
+
+msgid "Filament"
+msgstr "Filament"
+
+msgid "Files"
+msgstr "Soubory"
+
+msgid "Macros"
+msgstr "Makra"
+
+msgid "Console"
+msgstr "Konzole"
+
+msgid "System"
+msgstr "Systém"
+
+msgid "Network"
+msgstr "Síť"
+
+msgid "Updates"
+msgstr "Aktualizace"
+
+msgid "Home"
+msgstr "Domů"
+
+msgid "Emergency stop"
+msgstr "Nouzové zastavení"
+
+msgid "Cancel"
+msgstr "Zrušit"
+
+msgid "Set"
+msgstr "Nastavit"
+
+msgid "Delete"
+msgstr "Smazat"
+
+msgid "space"
+msgstr "mezera"
+
+msgid "No"
+msgstr "Ne"
+
+msgid "Yes"
+msgstr "Ano"
+
+msgid "Estimated time"
+msgstr "Odhadovaný čas"
+
+msgid "Layer height"
+msgstr "Výška vrstvy"
+
+msgid "Slicer"
+msgstr "Slicer"
+
+msgid "Close"
+msgstr "Zavřít"
+
+msgid "Print"
+msgstr "Tisknout"
+
+msgid "Connection settings"
+msgstr "Nastavení připojení"
+
+msgid "Restart"
+msgstr "Restartovat"
+
+msgid "Firmware restart"
+msgstr "Restart firmwaru"
+
+msgid "Tune"
+msgstr "Doladit"
+
+msgid "Print speed"
+msgstr "Rychlost tisku"
+
+msgid "Speed"
+msgstr "Rychlost"
+
+msgid "Flow"
+msgstr "Průtok"
+
+msgid "Z offset"
+msgstr "Posun Z"
+
+msgid "Part cooling"
+msgstr "Chlazení výtisku"
+
+msgid "Type a G-code command..."
+msgstr "Zadejte příkaz G-code..."
+
+msgid "Send"
+msgstr "Odeslat"
+
+msgid "Paused, remaining"
+msgstr "Pozastaveno, zbývá"
+
+msgid "Remaining"
+msgstr "Zbývá"
+
+msgid "finishes around {}"
+msgstr "konec kolem {}"
+
+msgid "layer {} · Z {}"
+msgstr "vrstva {} · Z {}"
+
+msgid "print time · filament {}"
+msgstr "doba tisku · filament {}"
+
+msgid "State"
+msgstr "Stav"
+
+msgid "Pause"
+msgstr "Pozastavit"
+
+msgid "Resume"
+msgstr "Pokračovat"
+
+msgid "Cancel the current print?"
+msgstr "Zrušit probíhající tisk?"
+
+msgid "Print again"
+msgstr "Tisknout znovu"
+
+msgid "Nozzle {}°"
+msgstr "Tryska {}°"
+
+msgid "Too cold to extrude (min. 170°)"
+msgstr "Příliš studené na extruzi (min. 170°)"
+
+msgid "Length [mm]"
+msgstr "Délka [mm]"
+
+msgid "Speed [mm/s]"
+msgstr "Rychlost [mm/s]"
+
+msgid "Filament change"
+msgstr "Výměna filamentu"
+
+msgid "Fans"
+msgstr "Ventilátory"
+
+msgid "G-code files ({})"
+msgstr "Soubory G-code ({})"
+
+msgid "Refresh"
+msgstr "Obnovit"
+
+msgid "No files"
+msgstr "Žádné soubory"
+
+msgid "No macros (gcode_macro without a _ prefix)"
+msgstr "Žádná makra (gcode_macro bez předpony _)"
+
+msgid "Run macro {}?"
+msgstr "Spustit makro {}?"
+
+msgid "{}  (not homed)"
+msgstr "{}  (bez referování)"
+
+msgid "Step [mm]"
+msgstr "Krok [mm]"
+
+msgid "Motors off"
+msgstr "Vypnout motory"
+
+msgid "Connected"
+msgstr "Připojeno"
+
+msgid "Saved"
+msgstr "Uloženo"
+
+msgid "Forget the network {}?"
+msgstr "Zapomenout síť {}?"
+
+msgid "Join the open network {}?"
+msgstr "Připojit k otevřené síti {}?"
+
+msgid "Status only: network changes are disabled on this system"
+msgstr "Jen stav: změny sítě jsou na tomto systému vypnuté"
+
+msgid "no port"
+msgstr "žádný port"
+
+msgid "no cable"
+msgstr "bez kabelu"
+
+msgid "getting an address..."
+msgstr "získávání adresy..."
+
+msgid "Static address"
+msgstr "Pevná adresa"
+
+msgid "IP address"
+msgstr "Adresa IP"
+
+msgid "IP address (e.g. 192.168.1.20/24)"
+msgstr "Adresa IP (např. 192.168.1.20/24)"
+
+msgid "Gateway"
+msgstr "Brána"
+
+msgid "Gateway (e.g. 192.168.1.1)"
+msgstr "Brána (např. 192.168.1.1)"
+
+msgid "DNS servers (e.g. 192.168.1.1 1.1.1.1)"
+msgstr "Servery DNS (např. 192.168.1.1 1.1.1.1)"
+
+msgid "Apply"
+msgstr "Použít"
+
+msgid "no adapter"
+msgstr "žádný adaptér"
+
+msgid "Hidden network"
+msgstr "Skrytá síť"
+
+msgid "Scanning..."
+msgstr "Hledání..."
+
+msgid "Scan"
+msgstr "Hledat"
+
+msgid "No Wi-Fi adapter. Plug in a USB Wi-Fi adapter to use wireless networks."
+msgstr "Žádný adaptér Wi-Fi. Pro bezdrátové sítě připojte USB adaptér Wi-Fi."
+
+msgid "Looking for networks..."
+msgstr "Hledání sítí..."
+
+msgid "No networks found"
+msgstr "Nenalezeny žádné sítě"
+
+msgid "Preset name"
+msgstr "Název předvolby"
+
+msgid "{} - nozzle"
+msgstr "{} - tryska"
+
+msgid "{} - bed"
+msgstr "{} - podložka"
+
+msgid "Save"
+msgstr "Uložit"
+
+msgid "Connection"
+msgstr "Připojení"
+
+msgid "Moonraker address (ws://host:7125/websocket)"
+msgstr "Adresa Moonrakeru (ws://host:7125/websocket)"
+
+msgid "Manual movement"
+msgstr "Ruční pohyb"
+
+msgid "XY speed"
+msgstr "Rychlost XY"
+
+msgid "XY speed [mm/s]"
+msgstr "Rychlost XY [mm/s]"
+
+msgid "Z speed"
+msgstr "Rychlost Z"
+
+msgid "Z speed [mm/s]"
+msgstr "Rychlost Z [mm/s]"
+
+msgid "Language"
+msgstr "Jazyk"
+
+msgid "File: {}"
+msgstr "Soubor: {}"
+
+msgid "Presets (name, nozzle, bed)"
+msgstr "Předvolby (název, tryska, podložka)"
+
+msgid "+ Add"
+msgstr "+ Přidat"
+
+msgid "New"
+msgstr "Nová"
+
+msgid "Information"
+msgstr "Informace"
+
+msgid "Host"
+msgstr "Hostitel"
+
+msgid "Restart Klipper?"
+msgstr "Restartovat Klipper?"
+
+msgid "Restart the firmware (MCU)?"
+msgstr "Restartovat firmware (MCU)?"
+
+msgid "Computer"
+msgstr "Počítač"
+
+msgid "Reboot"
+msgstr "Restartovat"
+
+msgid "Reboot the printer computer?"
+msgstr "Restartovat počítač tiskárny?"
+
+msgid "Shut down"
+msgstr "Vypnout"
+
+msgid "Shut down the printer computer?"
+msgstr "Vypnout počítač tiskárny?"
+
+msgid "off"
+msgstr "vyp."
+
+msgid "Presets"
+msgstr "Předvolby"
+
+msgid "Heaters off"
+msgstr "Vypnout topení"
+
+msgid "Connecting..."
+msgstr "Připojování..."
+
+msgid "No connection"
+msgstr "Bez připojení"
+
+msgid "Klipper is starting"
+msgstr "Klipper se spouští"
+
+msgid "Klipper shut down"
+msgstr "Klipper vypnut"
+
+msgid "Klipper error"
+msgstr "Chyba Klipperu"
+
+msgid "Connecting to Klipper..."
+msgstr "Připojování ke Klipperu..."
+
+msgid "Klipper unavailable"
+msgstr "Klipper nedostupný"
+
+msgid "Busy"
+msgstr "Zaneprázdněn"
+
+msgid "Printing"
+msgstr "Tisk"
+
+msgid "Paused"
+msgstr "Pozastaveno"
+
+msgid "Complete"
+msgstr "Dokončeno"
+
+msgid "Cancelled"
+msgstr "Zrušeno"
+
+msgid "Print error"
+msgstr "Chyba tisku"
+
+msgid "Ready"
+msgstr "Připraveno"
+
+msgid "Cannot connect to Moonraker ({})"
+msgstr "Nelze se připojit k Moonrakeru ({})"
+
+msgid "Nozzle {}"
+msgstr "Tryska {}"
+
+msgid "Nozzle"
+msgstr "Tryska"
+
+msgid "Bed"
+msgstr "Podložka"
+
+msgid "Not connected"
+msgstr "Nepřipojeno"
+
+msgid "Invalid IP address: {} (e.g. 192.168.1.20/24)"
+msgstr "Neplatná adresa IP: {} (např. 192.168.1.20/24)"
+
+msgid "Invalid gateway: {}"
+msgstr "Neplatná brána: {}"
+
+msgid "Invalid DNS server: {}"
+msgstr "Neplatný server DNS: {}"
+
+msgid "Could not save settings: {}"
+msgstr "Nastavení nelze uložit: {}"
+
+msgid "Could not apply the change: {}"
+msgstr "Změnu nelze použít: {}"
+
+msgid "Moonraker address must start with ws:// or wss:// and contain no spaces"
+msgstr "Adresa Moonrakeru musí začínat ws:// nebo wss:// a nesmí obsahovat mezery"
+
+msgid "{} speed must be between 0.1 and 1000 mm/s"
+msgstr "Rychlost {} musí být mezi 0,1 a 1000 mm/s"
+
+msgid "Every preset needs a name"
+msgstr "Každá předvolba musí mít název"
+
+msgid "Preset {}: temperature out of range"
+msgstr "Předvolba {}: teplota mimo rozsah"
+
+msgid "No connection to Moonraker"
+msgstr "Bez připojení k Moonrakeru"
+
+msgid "Settings saved"
+msgstr "Nastavení uloženo"
+
+msgid "{} - target temperature"
+msgstr "{} - cílová teplota"
+
+msgid "Password for {}"
+msgstr "Heslo pro {}"
+
+msgid "Hidden network name (SSID)"
+msgstr "Název skryté sítě (SSID)"
+
+msgid "Password for {} (empty for an open network)"
+msgstr "Heslo pro {} (prázdné pro otevřenou síť)"
+
+msgid "Decrease {}"
+msgstr "Snížit {}"
+
+msgid "Increase {}"
+msgstr "Zvýšit {}"
+
+msgid "Probe offset (e.g. BLTouch)"
+msgstr "Posun sondy (např. BLTouch)"
+
+msgid "Z endstop position"
+msgstr "Poloha koncového spínače Z"
+
+msgid "Too low: {} mm · too high: {} mm"
+msgstr "Příliš nízko: {} mm · příliš vysoko: {} mm"
+
+msgid "Lower the nozzle until a sheet of paper under it slides with slight friction, then press Accept."
+msgstr "Spouštějte trysku, dokud papír pod ní neklouže s lehkým odporem, pak stiskněte Přijmout."
+
+msgid "Heat the nozzle and the bed to printing temperature first. The printer homes if needed, moves to the middle of the bed and starts the paper test."
+msgstr "Nejdřív nahřejte trysku a podložku na teplotu tisku. Tiskárna v případě potřeby provede referování, přejede na střed podložky a spustí test s papírem."
+
+msgid "The new value is ready. Saving it writes the printer configuration and restarts Klipper."
+msgstr "Nová hodnota je připravena. Uložení zapíše konfiguraci tiskárny a restartuje Klipper."
+
+msgid "Save and restart"
+msgstr "Uložit a restartovat"
+
+msgid "Save the configuration and restart Klipper?"
+msgstr "Uložit konfiguraci a restartovat Klipper?"
+
+msgid "Start calibration"
+msgstr "Spustit kalibraci"
+
+msgid "Raise nozzle"
+msgstr "Zvednout trysku"
+
+msgid "Lower nozzle"
+msgstr "Spustit trysku"
+
+msgid "Abort"
+msgstr "Přerušit"
+
+msgid "Accept"
+msgstr "Přijmout"
+
+msgid "Calibration"
+msgstr "Kalibrace"
+
+msgid "Name of the new mesh profile"
+msgstr "Název nového profilu sítě"
+
+msgid "No mesh loaded"
+msgstr "Není načtena žádná síť"
+
+msgid "Profile: {}"
+msgstr "Profil: {}"
+
+msgid "Range: {}"
+msgstr "Rozptyl: {}"
+
+msgid "Lowest: {}"
+msgstr "Nejníž: {}"
+
+msgid "Highest: {}"
+msgstr "Nejvýš: {}"
+
+msgid "Heat the bed to printing temperature, then press Calibrate. The printer homes if needed and probes the bed; the result is kept as the \"default\" profile."
+msgstr "Nahřejte podložku na teplotu tisku a stiskněte Kalibrovat. Tiskárna v případě potřeby provede referování a změří podložku; výsledek se uloží jako profil \"default\"."
+
+msgid "Bed mesh is not configured in Klipper ([bed_mesh] section)."
+msgstr "Síť podložky není v Klipperu nastavena (sekce [bed_mesh])."
+
+msgid "Calibrate"
+msgstr "Kalibrovat"
+
+msgid "New profile"
+msgstr "Nový profil"
+
+msgid "Profiles"
+msgstr "Profily"
+
+msgid "No saved profiles"
+msgstr "Žádné uložené profily"
+
+msgid "Load profile {}"
+msgstr "Načíst profil {}"
+
+msgid "Delete the mesh profile {}?"
+msgstr "Smazat profil sítě {}?"
+
+msgid "Unload mesh"
+msgstr "Uvolnit síť"
+
+msgid "Screen saver"
+msgstr "Spořič obrazovky"
+
+msgid "Off"
+msgstr "Vyp."
+
+msgid "{} min"
+msgstr "{} min"
+
+msgid "Wi-Fi is off or not managed by NetworkManager"
+msgstr "Wi-Fi je vypnuté nebo ho nespravuje NetworkManager"
+
+msgid "System packages"
+msgstr "Systémové balíčky"
+
+msgid "{} packages to update"
+msgstr "Balíčků k aktualizaci: {}"
+
+msgid "Up to date"
+msgstr "Aktuální"
+
+msgid "{} · installation not recognised, see Mainsail"
+msgstr "{} · instalace nerozpoznána, viz Mainsail"
+
+msgid "{} · update available"
+msgstr "{} · aktualizace k dispozici"
+
+msgid "{} · up to date"
+msgstr "{} · aktuální"
+
+msgid "Update"
+msgstr "Aktualizovat"
+
+msgid "Klip-Boy {}"
+msgstr "Klip-Boy {}"
+
+msgid "Working..."
+msgstr "Probíhá..."
+
+msgid "Not available while printing"
+msgstr "Během tisku nedostupné"
+
+msgid "Moonraker's update manager is not available."
+msgstr "Správce aktualizací Moonrakeru není k dispozici."
+
+msgid "Check"
+msgstr "Zkontrolovat"
+
+msgid "Update all"
+msgstr "Aktualizovat vše"
+
+msgid "Update everything? Klipper and Moonraker restart during the update."
+msgstr "Aktualizovat vše? Klipper a Moonraker se během aktualizace restartují."
+
+msgid "Bed screws"
+msgstr "Šrouby podložky"
+
+msgid "Gantry"
+msgstr "Portál"
+
+msgid "Bed tilt"
+msgstr "Náklon podložky"
+
+msgid "Screw {}"
+msgstr "Šroub {}"
+
+msgid "Reference"
+msgstr "Referenční"
+
+msgid "OK"
+msgstr "OK"
+
+msgid "Clockwise {}"
+msgstr "Po směru hodin {}"
+
+msgid "Counter-clockwise {}"
+msgstr "Proti směru hodin {}"
+
+msgid "Bed levelling is not configured in Klipper ([screws_tilt_adjust], [bed_screws], [z_tilt] or [quad_gantry_level] section)."
+msgstr "Vyrovnání podložky není v Klipperu nastaveno (sekce [screws_tilt_adjust], [bed_screws], [z_tilt] nebo [quad_gantry_level])."
+
+msgid "Fine adjustment"
+msgstr "Jemné doladění"
+
+msgid "Coarse adjustment"
+msgstr "Hrubé nastavení"
+
+msgid "Turn the screw until a sheet of paper under the nozzle slides with slight friction. Press Adjusted if you turned it, Accept if it was already right."
+msgstr "Otáčejte šroubem, dokud papír pod tryskou neklouže s lehkým odporem. Stiskněte Upraveno, pokud jste otáčeli, nebo Přijmout, pokud byl v pořádku."
+
+msgid "Heat the bed to printing temperature, then press Measure. The probe checks the bed at each screw and shows how far to turn it."
+msgstr "Nahřejte podložku na teplotu tisku a stiskněte Změřit. Sonda změří podložku u každého šroubu a ukáže, o kolik jím otočit."
+
+msgid "The screws differ more than allowed (max. {} mm)."
+msgstr "Šrouby se liší víc, než je povoleno (max. {} mm)."
+
+msgid "01:15 means one full turn and a quarter. Measure again after turning the screws."
+msgstr "01:15 znamená jednu celou otáčku a čtvrt. Po otočení šrouby změřte znovu."
+
+msgid "Heat the bed to printing temperature first. The nozzle stops over each screw in turn for the paper test."
+msgstr "Nejdřív nahřejte podložku na teplotu tisku. Tryska se postupně zastaví nad každým šroubem pro test s papírem."
+
+msgid "Levelled since Klipper started."
+msgstr "Vyrovnáno od spuštění Klipperu."
+
+msgid "Not levelled since Klipper started. The Z motors are adjusted using the probe, then Z is homed again."
+msgstr "Od spuštění Klipperu nevyrovnáno. Motory Z se nastaví pomocí sondy a pak se osa Z znovu zreferuje."
+
+msgid "Adjusted"
+msgstr "Upraveno"
+
+msgid "Measure"
+msgstr "Změřit"
+
+msgid "Adjust screws"
+msgstr "Seřídit šrouby"
+
+msgid "Level bed tilt"
+msgstr "Vyrovnat náklon"
+
+msgid "Level gantry"
+msgstr "Vyrovnat portál"
+
+msgid "Heater"
+msgstr "Topení"
+
+msgid "Calibrating"
+msgstr "Probíhá kalibrace"
+
+msgid "No heaters found."
+msgstr "Nenalezeno žádné topení."
+
+msgid "The heater is heated to the target and its response is measured, so that it holds the temperature steadily. It takes a few minutes; use your usual printing temperature."
+msgstr "Topení se nahřeje na cíl a změří se jeho odezva, aby pak drželo teplotu stabilně. Trvá to několik minut; použijte svou obvyklou teplotu tisku."
+
+msgid "Target"
+msgstr "Cíl"
+
+msgid "Wait until Klipper reports the result. The emergency stop interrupts the calibration."
+msgstr "Počkejte, až Klipper ohlásí výsledek. Nouzové zastavení kalibraci přeruší."
+
+msgid "Extruder"
+msgstr "Extrudér"
+
+msgid "Filament left above the extruder"
+msgstr "Filament zbývající nad extrudérem"
+
+msgid "Heat the nozzle to the printing temperature."
+msgstr "Nahřejte trysku na teplotu tisku."
+
+msgid "Heat to {}°"
+msgstr "Nahřát na {}°"
+
+msgid "Mark the filament {} mm above the extruder entry."
+msgstr "Označte filament {} mm nad vstupem do extrudéru."
+
+msgid "Extrude {} mm slowly. Too cold to extrude (min. {}°)."
+msgstr "Pomalu vytlačte {} mm. Příliš studené na extruzi (min. {}°)."
+
+msgid "Extrude {} mm slowly (about 2 minutes) and wait until the motor stops."
+msgstr "Pomalu vytlačte {} mm (asi 2 minuty) a počkejte, až se motor zastaví."
+
+msgid "Extrude {} mm"
+msgstr "Vytlačit {} mm"
+
+msgid "Measure the filament left between the extruder entry and the mark."
+msgstr "Změřte filament, který zbývá mezi vstupem do extrudéru a značkou."
+
+msgid "Left to the mark"
+msgstr "Zbývá ke značce"
+
+msgid "Rotation distance"
+msgstr "Rotation distance"
+
+msgid "No rotation_distance in the [extruder] section of the Klipper config."
+msgstr "V sekci [extruder] konfigurace Klipperu chybí rotation_distance."
+
+msgid "Current"
+msgstr "Aktuální"
+
+msgid "Extruded"
+msgstr "Vytlačeno"
+
+msgid "This is more than 30% off; check the mark and measure again."
+msgstr "Odchylka je přes 30 %; zkontrolujte značku a změřte znovu."
+
+msgid "In use until Klipper restarts; printer.cfg still has {}."
+msgstr "Platí do restartu Klipperu; printer.cfg má stále {}."
+
+msgid "Saving..."
+msgstr "Ukládání..."
+
+msgid "Saved in printer.cfg."
+msgstr "Uloženo v printer.cfg."
+
+msgid "printer.cfg has no rotation_distance in [extruder] (it may be in an included file). Set it to {} there."
+msgstr "printer.cfg nemá rotation_distance v [extruder] (může být ve vloženém souboru). Nastavte ho tam na {}."
+
+msgid "Could not save: {}"
+msgstr "Nelze uložit: {}"
+
+msgid "Save in printer.cfg"
+msgstr "Uložit do printer.cfg"
+
+msgid "Write rotation_distance: {} into printer.cfg?"
+msgstr "Zapsat rotation_distance: {} do printer.cfg?"
+
+msgid "Status"
+msgstr "Stav"
+
+msgid "Control"
+msgstr "Ovládání"
+
+msgid "Settings"
+msgstr "Nastavení"
+
+msgid "Mesh"
+msgstr "Síť"
+
+msgid "Heat the nozzle"
+msgstr "Nahřát trysku"
+
+msgid "No LOAD_FILAMENT / UNLOAD_FILAMENT macro in the Klipper config."
+msgstr "V konfiguraci Klipperu chybí makro LOAD_FILAMENT / UNLOAD_FILAMENT."
+
+msgid "Manual extrusion"
+msgstr "Ruční extruze"
+
+msgid "Retract {} mm"
+msgstr "Zatáhnout {} mm"
+
+msgid "Load"
+msgstr "Zavést"
+
+msgid "Unload"
+msgstr "Vysunout"

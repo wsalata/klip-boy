@@ -5,7 +5,7 @@
 
 moonraker_url = "ws://127.0.0.1:7125/websocket"
 
-# UI language: "auto" (system locale), "en" or "pl"
+# UI language: "auto" (system locale), "cs", "de", "en", "fr", "it" or "pl"
 language = "auto"
 
 # Manual movement speeds [mm/s]
