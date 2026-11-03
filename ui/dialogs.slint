@@ -1,6 +1,6 @@
 import { Theme } from "theme.slint";
 import { Printer, Actions, Overlay, Nav, Conn, Settings, Strings, Keys, Network, Screensaver, Update, ExtruderMeasure } from "state.slint";
-import { Btn, BtnKind, Card, Caption, InfoRow, Thumb, CursorText, Stepper, ValueBox, FanSpeeds } from "widgets.slint";
+import { Btn, BtnKind, Caption, InfoRow, Thumb, CursorText, Stepper, ValueBox, FanSpeeds, StateIcon } from "widgets.slint";
 
 // Dimmed backdrop that blocks touches to the screen below.
 component Scrim inherits Rectangle {
@@ -344,43 +344,145 @@ export component FileDialog inherits Scrim {
     }
 }
 
-// Start-up screen: "Please stand by" in the middle of the screen. packaging/plymouth/logo.png is
-// the same picture, placed at the same spot.
-export component StandBy inherits Rectangle {
-    picture := Image {
-        source: @image-url("icons/standby.png");
-        height: 310px;
-        width: self.height * 900 / 620;
+// The start-up sequence runs once per start of the panel.
+export global Boot {
+    in-out property <bool> done;
+}
+
+// "STEP ........ OK": a blinking block while the step is running.
+component BootLine inherits HorizontalLayout {
+    in property <string> text;
+    // "" while running, then "OK" or "ERR"
+    in property <string> result;
+    Text { text: root.text.to-uppercase(); color: Theme.text; letter-spacing: 1px; }
+    Rectangle {
+        horizontal-stretch: 1;
+        clip: true;
+        Text {
+            x: 10px;
+            height: parent.height;
+            text: "..............................................................................";
+            color: Theme.text-dim;
+            vertical-alignment: center;
+        }
+    }
+    Rectangle {
+        width: 60px;
+        if root.result != "": Text {
+            x: 10px;
+            height: parent.height;
+            text: root.result;
+            color: root.result == "OK" ? Theme.bright : Theme.danger-text;
+            font-weight: 700;
+            vertical-alignment: center;
+        }
+        // animation-tick() is only read on the running line
+        if root.result == "": Rectangle {
+            x: 10px;
+            width: 11px;
+            height: 18px;
+            background: Theme.text;
+            opacity: mod(animation-tick(), 600ms) < 300ms ? 1 : 0;
+        }
+    }
+}
+
+// The panel "boots" like a terminal: one step after another, the last one waiting for Moonraker.
+component BootScreen inherits Rectangle {
+    property <[string]> steps: [
+        @tr("Initializing display"),
+        @tr("Loading configuration"),
+        @tr("Loading interface"),
+        @tr("Starting network"),
+        @tr("Connecting to Moonraker"),
+    ];
+    // Line i shows from tick i + 1 and is done from tick i + 2
+    property <int> tick;
+    property <bool> answered: Printer.conn != Conn.connecting;
+    // Tick at which the Moonraker line got its result, -1 before
+    property <int> answered-at: -1;
+
+    VerticalLayout {
+        padding: 40px;
+        spacing: 8px;
+        alignment: start;
+        Text {
+            text: "KLIP-BOY OS v" + Printer.panel-version;
+            color: Theme.bright;
+            font-size: Theme.font-l;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+        Rectangle { height: 1px; background: Theme.border; }
+        Rectangle { height: 8px; }
+        for s[i] in root.steps: BootLine {
+            visible: root.tick > i;
+            text: s;
+            result: root.tick <= i + 1 ? ""
+                : i < root.steps.length - 1 ? "OK"
+                : !root.answered ? ""
+                : Printer.conn == Conn.disconnected ? "ERR" : "OK";
+        }
     }
 
-    Text {
-        y: picture.y + picture.height + 8px;
-        width: root.width;
-        text: Strings.status(Printer.status);
-        color: Theme.text-dim;
-        horizontal-alignment: center;
+    Timer {
+        interval: 220ms;
+        running: !Boot.done;
+        triggered => {
+            root.tick += 1;
+            if (root.answered-at < 0 && root.answered && root.tick > root.steps.length) {
+                root.answered-at = root.tick;
+            }
+            // Hold the finished list a moment; give up waiting after about two seconds
+            if ((root.answered-at >= 0 && root.tick >= root.answered-at + 3) || root.tick > root.steps.length + 10) {
+                Boot.done = true;
+            }
+        }
+    }
+}
+
+// Start-up screen: first the boot sequence, then, while Moonraker still does not answer,
+// "Please stand by" in the middle of the screen. packaging/plymouth/logo.png is the same
+// picture, placed at the same spot.
+export component StandBy inherits Rectangle {
+    if !Boot.done: BootScreen {}
+    if Boot.done: Rectangle {
+        picture := Image {
+            source: @image-url("icons/standby.png");
+            // One colour with alpha, so it follows the phosphor colour
+            colorize: Theme.bright;
+            height: 310px;
+            width: self.height * 900 / 620;
+        }
+
+        Text {
+            y: picture.y + picture.height + 8px;
+            width: root.width;
+            text: Strings.status(Printer.status);
+            color: Theme.text-dim;
+            horizontal-alignment: center;
+        }
     }
 }
 
 // Shown instead of a screen when Klipper is not ready or there is no connection.
 export component NotReadyPanel inherits Rectangle {
-
+    // While connecting, the start-up screen covers everything
     if Printer.conn != Conn.connecting: VerticalLayout {
         alignment: center;
         padding: 24px;
         spacing: 14px;
         HorizontalLayout {
             alignment: center;
-            Image {
-                source: @image-url("icons/helm.svg");
-                colorize: Theme.accent;
-                width: 64px;
-                height: 64px;
+            StateIcon {
+                status: Printer.status;
+                width: 96px;
+                height: 96px;
             }
         }
         Text {
             text: Strings.status(Printer.status);
-            color: Printer.conn == Conn.connecting ? Theme.text : Theme.warn;
+            color: Theme.warn;
             font-size: Theme.font-l;
             font-weight: 700;
             horizontal-alignment: center;

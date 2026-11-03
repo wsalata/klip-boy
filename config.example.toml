@@ -8,6 +8,9 @@ moonraker_url = "ws://127.0.0.1:7125/websocket"
 # UI language: "auto" (system locale), "cs", "de", "en", "fr", "it" or "pl"
 language = "auto"
 
+# Screen colour: "green", "amber", "white" or "blue"
+phosphor = "green"
+
 # Manual movement speeds [mm/s]
 xy_speed = 100
 z_speed = 10

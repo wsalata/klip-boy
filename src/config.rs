@@ -4,6 +4,8 @@ use std::path::PathBuf;
 const DEFAULT_URL: &str = "ws://127.0.0.1:7125/websocket";
 /// UI languages selectable in the settings ("auto" follows the system locale)
 pub const LANGUAGES: [&str; 7] = ["auto", "cs", "de", "en", "fr", "it", "pl"];
+/// Screen colours, in the order of Theme.palettes in ui/theme.slint
+pub const PHOSPHORS: [&str; 4] = ["green", "amber", "white", "blue"];
 
 #[derive(Debug, Clone, PartialEq, Deserialize, Serialize)]
 #[serde(default)]
@@ -11,6 +13,8 @@ pub struct Config {
     pub moonraker_url: String,
     /// "auto" or one of LANGUAGES
     pub language: String,
+    /// Screen colour, one of PHOSPHORS
+    pub phosphor: String,
     /// Manual XY movement speed [mm/s]
     pub xy_speed: f32,
     /// Manual Z movement speed [mm/s]
@@ -48,6 +52,7 @@ impl Default for Config {
             // Empty = not decided yet, see `load`
             moonraker_url: String::new(),
             language: "auto".into(),
+            phosphor: "green".into(),
             xy_speed: 100.0,
             z_speed: 10.0,
             screensaver_minutes: 5,
@@ -119,7 +124,15 @@ impl Config {
         if !LANGUAGES.contains(&self.language.as_str()) {
             return Err(ConfigError::new("language", self.language.clone()));
         }
+        if !PHOSPHORS.contains(&self.phosphor.as_str()) {
+            return Err(ConfigError::new("phosphor", self.phosphor.clone()));
+        }
         Ok(())
+    }
+
+    /// Index of the screen colour in PHOSPHORS (Theme.phosphor); unknown names give green
+    pub fn phosphor_index(&self) -> i32 {
+        PHOSPHORS.iter().position(|&p| p == self.phosphor).unwrap_or(0) as i32
     }
 
     pub fn path() -> Option<PathBuf> {
@@ -153,6 +166,7 @@ mod tests {
     fn old_file_without_language_still_loads() {
         let cfg: Config = toml::from_str("moonraker_url = \"ws://p/websocket\"\n").unwrap();
         assert_eq!(cfg.language, "auto");
+        assert_eq!(cfg.phosphor_index(), 0);
     }
 
     #[test]
@@ -169,5 +183,10 @@ mod tests {
         let mut cfg = valid();
         cfg.language = "xx".into();
         assert_eq!(cfg.validate().unwrap_err().code, "language");
+        let mut cfg = valid();
+        cfg.phosphor = "pink".into();
+        assert_eq!(cfg.validate().unwrap_err().code, "phosphor");
+        cfg.phosphor = "blue".into();
+        assert_eq!(cfg.phosphor_index(), 3);
     }
 }

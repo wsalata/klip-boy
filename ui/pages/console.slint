@@ -1,6 +1,6 @@
 import { Theme } from "../theme.slint";
-import { Printer, Actions, ConsoleLine, Keys, Screensaver } from "../state.slint";
-import { Btn, BtnKind, Card, Caption, CursorText } from "../widgets.slint";
+import { Printer, Actions, Keys, Screensaver } from "../state.slint";
+import { Btn, BtnKind, Card, CursorText } from "../widgets.slint";
 import { ListView } from "std-widgets.slint";
 
 component KbKey inherits Btn {
@@ -96,7 +96,6 @@ export component ConsolePage inherits Rectangle {
                         Text {
                             text: line.text;
                             wrap: word-wrap;
-                            font-family: Theme.mono;
                             font-size: 13px;
                             color: line.kind == 1 ? Theme.accent
                                 : line.kind == 2 ? Theme.danger

@@ -1,5 +1,6 @@
 mod bridge;
 mod config;
+mod history;
 #[cfg(target_os = "linux")]
 mod display;
 mod line_edit;
@@ -54,6 +55,7 @@ fn main() -> anyhow::Result<()> {
 
     // Must run after the first component exists
     settings::apply_language(&cfg.language);
+    ui.global::<Theme>().set_phosphor(cfg.phosphor_index());
 
     let (tx, rx) = mpsc::unbounded_channel::<Command>();
     wire_actions(&ui, &tx);
@@ -69,7 +71,7 @@ fn main() -> anyhow::Result<()> {
 
     let clock = Timer::default();
     let weak = ui.as_weak();
-    let settings = shared_cfg.clone();
+    let settings = shared_cfg;
     let tick = move || {
         if let Some(ui) = weak.upgrade() {
             ui.global::<Printer>().set_clock(chrono::Local::now().format("%H:%M").to_string().into());
@@ -82,6 +84,7 @@ fn main() -> anyhow::Result<()> {
     };
     tick();
     clock.start(TimerMode::Repeated, Duration::from_secs(1), tick);
+    let _history = history::start(&ui);
 
     // Networking runs in its own thread with tokio; the UI (Slint) must stay on the main thread
     let weak = ui.as_weak();

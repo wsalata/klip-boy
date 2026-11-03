@@ -55,6 +55,44 @@ component LanguageRow inherits Rectangle {
     }
 }
 
+// One screen colour: a patch of it and its name; the chosen one is framed.
+component PhosphorKey inherits Rectangle {
+    in property <string> name;
+    in property <color> swatch;
+    in property <bool> active;
+    callback clicked();
+    min-height: 44px;
+    horizontal-stretch: 1;
+    background: ta.pressed ? Theme.surface-2 : root.active ? Theme.accent.transparentize(0.88) : transparent;
+    border-width: root.active ? 2px : 1px;
+    border-color: root.active ? Theme.accent : Theme.border;
+    accessible-role: button;
+    accessible-label: root.name;
+    accessible-action-default => { root.clicked(); }
+
+    HorizontalLayout {
+        alignment: center;
+        spacing: 8px;
+        padding-left: 8px;
+        padding-right: 8px;
+        VerticalLayout {
+            alignment: center;
+            Rectangle { width: 14px; height: 14px; background: root.swatch; }
+        }
+        Text {
+            text: root.name;
+            color: Theme.text;
+            font-size: Theme.font-s;
+            vertical-alignment: center;
+            overflow: elide;
+        }
+    }
+    ta := TouchArea {
+        pointer-event(e) => { if (e.kind == PointerEventKind.down) { Screensaver.activity(); } }
+        clicked => { root.clicked(); }
+    }
+}
+
 export component SettingsPage inherits Rectangle {
     // Language names are written in their own language, so they are not translated
     property <[{ code: string, name: string }]> languages: [
@@ -116,6 +154,22 @@ export component SettingsPage inherits Rectangle {
                         label: @tr("Language");
                         value: root.language-name(Settings.language);
                         clicked => { root.choosing-language = true; }
+                    }
+                    // Applied on Save, like the language
+                    Caption { text: @tr("Screen colour"); }
+                    HorizontalLayout {
+                        spacing: 4px;
+                        for c[i] in [
+                            { code: "green", name: @tr("Green") },
+                            { code: "amber", name: @tr("Amber") },
+                            { code: "white", name: @tr("White") },
+                            { code: "blue", name: @tr("Blue") },
+                        ]: PhosphorKey {
+                            name: c.name;
+                            swatch: Theme.swatches[i];
+                            active: Settings.phosphor == c.code;
+                            clicked => { Settings.phosphor = c.code; }
+                        }
                     }
                     Caption { text: @tr("Screen saver"); }
                     HorizontalLayout {

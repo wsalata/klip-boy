@@ -1,23 +1,71 @@
-// "Phosphor terminal": green CRT on near-black, square corners, one monospaced typeface.
-// Amber marks warnings and heat; red is kept for danger and the emergency stop.
+// "Phosphor terminal": one phosphor colour on near-black, square corners, one monospaced
+// typeface. Amber (or cream on the amber screen) marks warnings and heat; red is kept for danger
+// and the emergency stop.
+
+struct Palette {
+    bg: color,
+    surface: color,
+    surface-2: color,
+    border: color,
+    text: color,
+    text-dim: color,
+    on-accent: color,
+    // Pictures drawn in the phosphor colour at full brightness (stand-by screen)
+    bright: color,
+    warn: color,
+    hot: color,
+}
+
 export global Theme {
-    out property <color> bg: #041309;
-    out property <color> surface: #0F291C;
-    out property <color> surface-2: #123524;
-    out property <color> border: #0E5A36;
-    out property <color> text: #0FBB6B;
-    out property <color> text-dim: #0F8F54;
-    out property <color> accent: #0FBB6B;
-    // Text on an accent background: the green is lit, the text is the screen's black
-    out property <color> on-accent: #021009;
-    out property <color> ok: #0FBB6B;
-    out property <color> warn: #FFC23D;
+    // Index into `palettes`, in the order of config::PHOSPHORS: green, amber, white, blue
+    in property <int> phosphor: 0;
+    property <[Palette]> palettes: [
+        {
+            bg: #041309, surface: #0F291C, surface-2: #123524, border: #0E5A36,
+            text: #0FBB6B, text-dim: #0F8F54, on-accent: #021009, bright: #1BFF80,
+            warn: #FFC23D, hot: #FFB13D,
+        },
+        {
+            bg: #140D03, surface: #2A1F0C, surface-2: #36280F, border: #6A4A0E,
+            text: #FFB000, text-dim: #C08410, on-accent: #120B01, bright: #FFC640,
+            warn: #FFF0C8, hot: #FFEBB8,
+        },
+        {
+            bg: #0A0D0C, surface: #1E2422, surface-2: #262E2B, border: #4A5550,
+            text: #D8E4DC, text-dim: #9AA8A0, on-accent: #0A0D0C, bright: #F2FFF8,
+            warn: #FFC23D, hot: #FFB13D,
+        },
+        {
+            bg: #040E16, surface: #0E2232, surface-2: #122B3E, border: #1A4A6A,
+            text: #3FB8FF, text-dim: #2F8CC4, on-accent: #020A10, bright: #7FD4FF,
+            warn: #FFC23D, hot: #FFB13D,
+        },
+    ];
+    property <Palette> p: self.palettes[self.phosphor];
+    // Each screen colour, for the choice in the settings
+    out property <[color]> swatches: [
+        self.palettes[0].text, self.palettes[1].text, self.palettes[2].text, self.palettes[3].text,
+    ];
+
+    out property <color> bg: self.p.bg;
+    out property <color> surface: self.p.surface;
+    out property <color> surface-2: self.p.surface-2;
+    out property <color> border: self.p.border;
+    out property <color> text: self.p.text;
+    out property <color> text-dim: self.p.text-dim;
+    out property <color> accent: self.p.text;
+    // Text on an accent background: the phosphor is lit, the text is the screen's black
+    out property <color> on-accent: self.p.on-accent;
+    out property <color> bright: self.p.bright;
+    out property <color> warn: self.p.warn;
     out property <color> danger: #E8392B;
     out property <color> danger-text: #FF7A66;
     out property <color> danger-border: #6B2A22;
-    out property <color> hot: #FFB13D;
+    out property <color> hot: self.p.hot;
+    // Bed mesh: below zero towards this, above zero towards `hot`
+    out property <color> mesh-low: self.p.text-dim.mix(self.p.border, 0.4);
     // Backdrop under dialogs
-    out property <color> scrim: #020804d0;
+    out property <color> scrim: self.p.bg.transparentize(0.18);
 
     out property <length> gap: 10px;
     out property <length> font-s: 14px;
@@ -25,8 +73,6 @@ export global Theme {
     out property <length> font-l: 24px;
     out property <length> font-xl: 34px;
 
-    // Bundled in ui/fonts (OFL) and registered in app.slint
+    // The one typeface, bundled in ui/fonts (OFL) and registered in app.slint
     out property <string> font: "Martian Mono Condensed";
-    out property <string> display: "Martian Mono Condensed";
-    out property <string> mono: "Martian Mono Condensed";
 }

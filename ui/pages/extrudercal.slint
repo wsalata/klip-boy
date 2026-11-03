@@ -136,7 +136,6 @@ export component ExtruderCalibratePage inherits Rectangle {
                 if Printer.extruder-cal.available: Text {
                     text: root.plausible ? root.new-distance.to-fixed(3) : "-";
                     color: Theme.accent;
-                    font-family: Theme.display;
                     font-size: 40px;
                     font-weight: 700;
                     horizontal-alignment: center;
@@ -165,7 +164,7 @@ export component ExtruderCalibratePage inherits Rectangle {
                 if Printer.extruder-cal.save == "saving": Hint { text: @tr("Saving..."); }
                 if Printer.extruder-cal.save == "saved": Hint {
                     text: @tr("Saved in printer.cfg.");
-                    color: Theme.ok;
+                    color: Theme.accent;
                 }
                 if Printer.extruder-cal.save == "not-found": Hint {
                     text: @tr("printer.cfg has no rotation_distance in [extruder] (it may be in an included file). Set it to {} there.", Printer.extruder-cal.current.to-fixed(3));

@@ -762,3 +762,33 @@ msgstr "Charger"
 
 msgid "Unload"
 msgstr "Décharger"
+
+msgid "Screen colour"
+msgstr "Couleur de l'écran"
+
+msgid "Green"
+msgstr "Vert"
+
+msgid "Amber"
+msgstr "Ambre"
+
+msgid "White"
+msgstr "Blanc"
+
+msgid "Blue"
+msgstr "Bleu"
+
+msgid "Initializing display"
+msgstr "Initialisation de l'écran"
+
+msgid "Loading configuration"
+msgstr "Chargement de la configuration"
+
+msgid "Loading interface"
+msgstr "Chargement de l'interface"
+
+msgid "Starting network"
+msgstr "Démarrage du réseau"
+
+msgid "Connecting to Moonraker"
+msgstr "Connexion à Moonraker"

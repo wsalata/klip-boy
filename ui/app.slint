@@ -6,7 +6,7 @@ import "fonts/MartianMonoCondensed-Bold.ttf";
 import { Theme } from "theme.slint";
 import { Printer, Actions, Overlay, Nav, Conn, Status, Settings, Strings, Messages, Network, Update, Screensaver } from "state.slint";
 import { Btn, BtnKind } from "widgets.slint";
-import { NumpadDialog, ConfirmDialog, FileDialog, TextDialog, NotReadyPanel, TuneSheet, StandBy } from "dialogs.slint";
+import { NumpadDialog, ConfirmDialog, FileDialog, TextDialog, NotReadyPanel, TuneSheet, StandBy, Boot } from "dialogs.slint";
 import { DashboardPage } from "pages/dashboard.slint";
 import { TemperaturePage } from "pages/temperature.slint";
 import { MovePage } from "pages/move.slint";
@@ -26,7 +26,7 @@ import { PidPage } from "pages/pid.slint";
 import { ExtruderCalibratePage } from "pages/extrudercal.slint";
 import { ScreensaverView } from "screensaver.slint";
 
-export { Printer, Actions, Overlay, Nav, Settings, Messages, Network, Update, Screensaver }
+export { Theme, Printer, Actions, Overlay, Nav, Settings, Messages, Network, Update, Screensaver }
 
 struct NavItem { text: string, page: int }
 struct NavGroup { text: string, items: [NavItem] }
@@ -185,36 +185,56 @@ component Header inherits HorizontalLayout {
 
 // The screens of the current group, down the left side; the current one is boxed. Groups of one
 // screen have none.
-component SideMenu inherits VerticalLayout {
+component SideMenu inherits Rectangle {
     property <[NavItem]> items: Sections.groups[Sections.current].items;
+    // Position of the current screen in the list; the rows report it, so the order lives
+    // only in Sections.groups
+    property <int> current;
+    property <length> row-height: 44px;
+    property <length> spacing: 4px;
     width: 128px;
-    padding-left: 14px;
-    padding-top: 8px;
-    spacing: 4px;
-    alignment: start;
 
-    for it in root.items: Rectangle {
-        height: 44px;
-        background: it.page == Nav.page ? Theme.accent.transparentize(0.88)
-            : ta.pressed ? Theme.surface-2 : transparent;
-        accessible-role: tab;
-        accessible-label: it.text;
-        accessible-action-default => { Sections.go(it.page); }
-        if it.page == Nav.page: Rectangle { x: 0; width: 2px; background: Theme.accent; }
-        if it.page == Nav.page: Rectangle { x: parent.width - 2px; width: 2px; background: Theme.accent; }
-        Text {
-            x: 9px;
-            width: parent.width - 14px;
-            height: parent.height;
-            text: it.text.to-uppercase();
-            color: Theme.text;
-            font-size: 13px;
-            wrap: word-wrap;
-            vertical-alignment: center;
-        }
-        ta := TouchArea {
-            pointer-event(e) => { if (e.kind == PointerEventKind.down) { Screensaver.activity(); } }
-            clicked => { Sections.go(it.page); }
+    // One box that glides to the current row
+    Rectangle {
+        x: 14px;
+        y: 8px + root.current * (root.row-height + root.spacing);
+        width: parent.width - 14px;
+        height: root.row-height;
+        background: Theme.accent.transparentize(0.88);
+        animate y { duration: 150ms; easing: ease-out; }
+        Rectangle { x: 0; width: 2px; background: Theme.accent; }
+        Rectangle { x: parent.width - 2px; width: 2px; background: Theme.accent; }
+    }
+
+    VerticalLayout {
+        padding-left: 14px;
+        padding-top: 8px;
+        spacing: root.spacing;
+        alignment: start;
+
+        for it[i] in root.items: Rectangle {
+            property <bool> on: it.page == Nav.page;
+            init => { if (self.on) { root.current = i; } }
+            changed on => { if (self.on) { root.current = i; } }
+            height: root.row-height;
+            background: ta.pressed && !self.on ? Theme.surface-2 : transparent;
+            accessible-role: tab;
+            accessible-label: it.text;
+            accessible-action-default => { Sections.go(it.page); }
+            Text {
+                x: 9px;
+                width: parent.width - 14px;
+                height: parent.height;
+                text: it.text.to-uppercase();
+                color: Theme.text;
+                font-size: 13px;
+                wrap: word-wrap;
+                vertical-alignment: center;
+            }
+            ta := TouchArea {
+                pointer-event(e) => { if (e.kind == PointerEventKind.down) { Screensaver.activity(); } }
+                clicked => { Sections.go(it.page); }
+            }
         }
     }
 }
@@ -238,12 +258,8 @@ component BottomTab inherits Rectangle {
     accessible-label: root.text;
     accessible-action-default => { root.clicked(); }
 
-    Rectangle {
-        height: 36px;
-        background: root.active ? Theme.accent.transparentize(0.88) : ta.pressed ? Theme.surface-2 : transparent;
-        border-width: root.active ? 2px : 0px;
-        border-color: Theme.accent;
-    }
+    // The frame of the current tab is drawn by BottomTabs, so it can glide between tabs
+    if ta.pressed && !root.active: Rectangle { height: 36px; background: Theme.surface-2; }
     label := Text {
         text: root.text;
         color: Theme.text;
@@ -256,25 +272,49 @@ component BottomTab inherits Rectangle {
     }
 }
 
-component BottomTabs inherits HorizontalLayout {
+component BottomTabs inherits Rectangle {
+    // Where the current tab is, reported by the tabs
+    property <length> frame-x;
+    property <length> frame-width;
     height: 46px;
-    padding-left: 14px;
-    padding-right: 14px;
-    padding-bottom: 6px;
 
-    BottomLine { width: 40px; tick-left: true; }
-    for g[i] in Sections.groups: HorizontalLayout {
-        horizontal-stretch: 1;
-        BottomTab {
-            text: g.text;
-            active: i == Sections.current;
-            clicked => {
-                if (i != Sections.current) {
-                    Sections.go(g.items[0].page);
+    // Below the tabs, so their labels stay on top
+    Rectangle {
+        x: root.frame-x;
+        y: (root.height - 6px - self.height) / 2;
+        width: root.frame-width;
+        height: 36px;
+        background: Theme.accent.transparentize(0.88);
+        border-width: 2px;
+        border-color: Theme.accent;
+        animate x, width { duration: 150ms; easing: ease-out; }
+    }
+
+    HorizontalLayout {
+        padding-left: 14px;
+        padding-right: 14px;
+        padding-bottom: 6px;
+
+        BottomLine { width: 40px; tick-left: true; }
+        for g[i] in Sections.groups: HorizontalLayout {
+            property <bool> on: i == Sections.current;
+            init => { if (self.on) { root.frame-x = self.x; root.frame-width = tab.width; } }
+            changed on => { if (self.on) { root.frame-x = self.x; root.frame-width = tab.width; } }
+            // The window (desktop preview) or the language can change the positions
+            changed x => { if (self.on) { root.frame-x = self.x; } }
+            horizontal-stretch: 1;
+            tab := BottomTab {
+                text: g.text;
+                active: parent.on;
+                changed width => { if (parent.on) { root.frame-width = self.width; } }
+                clicked => {
+                    if (i != Sections.current) {
+                        Sections.go(g.items[0].page);
+                    }
                 }
             }
+            BottomLine { horizontal-stretch: 1; tick-right: i == Sections.groups.length - 1; }
         }
-        BottomLine { horizontal-stretch: 1; tick-right: i == Sections.groups.length - 1; }
     }
 }
 
@@ -302,6 +342,22 @@ export component AppWindow inherits Window {
             || status == Status.klipper-shutdown || status == Status.klipper-error) {
             Screensaver.wake();
         }
+    }
+
+    // Page change: the new page lights up from dark, like a tube warming up. animation-tick()
+    // is only read while it fades, so a still screen does not redraw.
+    property <int> page: Nav.page;
+    property <duration> fade-time: 180ms;
+    property <duration> fade-start;
+    property <bool> fading;
+    changed page => {
+        root.fade-start = animation-tick();
+        root.fading = true;
+    }
+    Timer {
+        interval: root.fade-time;
+        running: root.fading;
+        triggered => { root.fading = false; }
     }
 
     screen := Rectangle {
@@ -338,13 +394,19 @@ export component AppWindow inherits Window {
                     if !root.blocked && Nav.page == 14: BedLevelPage { width: 100%; height: 100%; }
                     if !root.blocked && Nav.page == 15: PidPage { width: 100%; height: 100%; }
                     if !root.blocked && Nav.page == 16: ExtruderCalibratePage { width: 100%; height: 100%; }
+                    if root.fading: Rectangle {
+                        property <float> left: 1 - min(1, (animation-tick() - root.fade-start) / root.fade-time);
+                        background: Theme.bg;
+                        opacity: 0.85 * self.left * self.left;
+                    }
                 }
             }
             BottomTabs {}
         }
 
-        // Starting up: "Please stand by" over the whole screen until Moonraker answers (or fails to)
-        if Printer.conn == Conn.connecting: Rectangle {
+        // Starting up: the boot sequence, then "Please stand by" over the whole screen until
+        // Moonraker answers (or fails to)
+        if Printer.conn == Conn.connecting || !Boot.done: Rectangle {
             background: Theme.bg;
             TouchArea {}
             StandBy {}
@@ -383,22 +445,5 @@ export component AppWindow inherits Window {
         }
 
         if Screensaver.active: ScreensaverView { width: 100%; height: 100%; }
-
-        // Tube effect over everything: scanlines and darker corners. Images let touches through.
-        // Both are pictures: a full-screen gradient costs several times more CPU with the
-        // software renderer on the Pi.
-        Image {
-            width: 100%;
-            height: 100%;
-            source: @image-url("icons/scanlines.png");
-            horizontal-tiling: repeat;
-            vertical-tiling: repeat;
-        }
-        Image {
-            width: 100%;
-            height: 100%;
-            source: @image-url("icons/vignette.png");
-            image-fit: fill;
-        }
     }
 }

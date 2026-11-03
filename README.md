@@ -220,7 +220,7 @@ the Home screen during a print.
 
 ## Configuration
 
-Settings (Moonraker address, language, manual movement speeds, temperature presets, screen saver) are changed on the
+Settings (Moonraker address, language, screen colour, manual movement speeds, temperature presets, screen saver) are changed on the
 **System → Panel settings** screen. Saving applies them immediately: changing the address switches the panel
 to another printer without a restart. The screen also works without a connection, so a wrong address can be fixed.
 
@@ -230,15 +230,18 @@ Settings are stored in `~/.config/klip-boy/config.toml`, or the file given by `K
 
 ## Look and fonts
 
-The UI looks like a retro-futuristic wrist computer: green phosphor on a black screen with scanlines,
-square frames and the monospaced Martian Mono Condensed typeface. The current group's name sits on the
+The UI looks like a retro-futuristic wrist computer: phosphor on a black screen (green, amber, white
+or blue, chosen in Settings), square frames and the monospaced Martian Mono Condensed typeface. The current group's name sits on the
 top line, with readouts of the printer state, temperatures and the time hanging below it; the group's
 screens are listed down the left side and the groups are tabs on the bottom line. File
-thumbnails and the bed mesh are drawn in the same green; amber marks heat and warnings, red is kept
-for danger and the emergency stop.
+thumbnails and the bed mesh are drawn in the same colour; amber (cream on the amber screen) marks
+heat and warnings, red is kept for danger and the emergency stop. Gauges are rows of blocks, the
+printer's state is shown as a pixel-art picture when there is no thumbnail, the Temperature
+screen draws the nozzle and bed over the last 5 minutes, and a new page lights up from dark.
 
-While the panel connects to Moonraker at start-up it shows "Please stand by"
-(`ui/icons/standby.png`), as does the boot splash.
+At start-up the panel runs a short terminal-style boot sequence; while Moonraker still does not
+answer after it, it shows "Please stand by" (`ui/icons/standby.png`), as does the boot splash
+(which stays green).
 
 The fonts are compiled into the binary from `ui/fonts/` (SIL Open Font License, `ui/fonts/OFL.txt`),
 so the Pi needs no extra font packages; colors and sizes live in `ui/theme.slint`.

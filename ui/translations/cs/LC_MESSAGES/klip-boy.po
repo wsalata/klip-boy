@@ -762,3 +762,33 @@ msgstr "Zavést"
 
 msgid "Unload"
 msgstr "Vysunout"
+
+msgid "Screen colour"
+msgstr "Barva obrazovky"
+
+msgid "Green"
+msgstr "Zelená"
+
+msgid "Amber"
+msgstr "Jantarová"
+
+msgid "White"
+msgstr "Bílá"
+
+msgid "Blue"
+msgstr "Modrá"
+
+msgid "Initializing display"
+msgstr "Inicializace displeje"
+
+msgid "Loading configuration"
+msgstr "Načítání konfigurace"
+
+msgid "Loading interface"
+msgstr "Načítání rozhraní"
+
+msgid "Starting network"
+msgstr "Spouštění sítě"
+
+msgid "Connecting to Moonraker"
+msgstr "Připojování k Moonrakeru"

@@ -33,7 +33,9 @@ export component BedMeshPage inherits Rectangle {
                         y: floor(i / Printer.mesh.cols) * parent.cell-h + 1px;
                         width: parent.cell-w - 2px;
                         height: parent.cell-h - 2px;
-                        background: cell.color;
+                        // Dim below zero, the phosphor colour at zero, hot above
+                        background: cell.level < 0 ? Theme.mesh-low.mix(Theme.text, -cell.level)
+                            : Theme.hot.mix(Theme.text, cell.level);
                         // Values only fit while the cells are big enough
                         if parent.cell-w >= 52px && parent.cell-h >= 22px: Text {
                             text: cell.value;

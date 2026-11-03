@@ -1,5 +1,5 @@
 import { Theme } from "theme.slint";
-import { Heater, Strings, Screensaver, Actions } from "state.slint";
+import { Screensaver, Actions, Status } from "state.slint";
 
 // danger-outline: a destructive action that is not an emergency (e.g. cancelling a print)
 export enum BtnKind { normal, accent, danger, danger-outline, ghost }
@@ -77,13 +77,15 @@ export component Btn inherits Rectangle {
     }
 }
 
-// Print thumbnail; slicers render them on a transparent background.
+// Print thumbnail; slicers render them on a transparent background. Rust sends a brightness
+// mask (thumbs::luminance_mask), drawn here in the phosphor colour.
 export component Thumb inherits Rectangle {
     in property <image> source;
     background: Theme.surface;
     clip: true;
     Image {
         source: root.source;
+        colorize: Theme.text;
         width: parent.width;
         height: parent.height;
         image-fit: contain;
@@ -126,17 +128,33 @@ export component Segmented inherits HorizontalLayout {
     }
 }
 
-export component Bar inherits Rectangle {
+// Row of blocks, lit from the left up to `value` (0..1), as on a Pip-Boy gauge. Only whole
+// blocks are lit; the last one is lit as soon as the value reaches into it.
+export component Segments inherits Rectangle {
     in property <float> value;
     in property <color> fill: Theme.accent;
-    height: 6px;
-    background: Theme.surface-2;
-    Rectangle {
-        x: 0;
-        width: parent.width * max(0, min(1, root.value));
-        height: parent.height;
-        background: root.fill;
+    in property <color> empty: Theme.surface-2;
+    in property <length> block: 6px;
+    in property <length> spacing: 2px;
+    // The leading lit block blinks (e.g. while printing)
+    in property <bool> blink;
+    property <int> count: max(1, floor((root.width + root.spacing) / (root.block + root.spacing)));
+    property <int> lit: ceil(clamp(root.value, 0, 1) * root.count - 0.001);
+    // Blocks stretched a little so the row ends flush with the right edge
+    property <length> step: (root.width + root.spacing) / root.count;
+    for i in root.count: Rectangle {
+        x: i * root.step;
+        width: root.step - root.spacing;
+        height: root.height;
+        background: i >= root.lit ? root.empty
+            // animation-tick() is only read while blinking, so a still bar does not redraw
+            : root.blink && i == root.lit - 1 ? (mod(animation-tick(), 1000ms) >= 500ms ? root.fill.transparentize(0.65) : root.fill)
+            : root.fill;
     }
+}
+
+export component Bar inherits Segments {
+    height: 6px;
 }
 
 // Single-line text with a cursor between the parts before and after it.
@@ -148,7 +166,6 @@ export component CursorText inherits HorizontalLayout {
     Text {
         text: root.before;
         color: Theme.text;
-        font-family: Theme.mono;
         vertical-alignment: center;
     }
     Rectangle {
@@ -158,7 +175,6 @@ export component CursorText inherits HorizontalLayout {
     Text {
         text: root.after;
         color: Theme.text;
-        font-family: Theme.mono;
         vertical-alignment: center;
     }
     if root.before == "" && root.after == "": Text {
@@ -258,7 +274,6 @@ export component Stepper inherits Rectangle {
             Text {
                 text: root.value;
                 color: Theme.text;
-                font-family: Theme.display;
                 font-size: Theme.font-l;
                 font-weight: 600;
                 horizontal-alignment: center;
@@ -299,4 +314,22 @@ export component SettingRow inherits Rectangle {
         pointer-event(e) => { if (e.kind == PointerEventKind.down) { Screensaver.activity(); } }
         clicked => { root.clicked(); }
     }
+}
+
+// Pixel-art picture of the printer's state (16x16 grid, drawn at whole multiples so the pixels
+// stay sharp: 96px, 128px ...).
+export component StateIcon inherits Image {
+    in property <Status> status;
+    property <Status> s: root.status;
+    source: s == Status.ready ? @image-url("icons/state-ready.svg")
+        : s == Status.printing ? @image-url("icons/state-printing.svg")
+        : s == Status.paused ? @image-url("icons/state-paused.svg")
+        : s == Status.complete ? @image-url("icons/state-complete.svg")
+        : s == Status.cancelled ? @image-url("icons/state-cancelled.svg")
+        : s == Status.print-error || s == Status.klipper-shutdown || s == Status.klipper-error ? @image-url("icons/state-error.svg")
+        : s == Status.disconnected || s == Status.klipper-unavailable ? @image-url("icons/state-offline.svg")
+        : @image-url("icons/state-busy.svg");
+    colorize: s == Status.print-error || s == Status.klipper-shutdown || s == Status.klipper-error ? Theme.danger-text
+        : s == Status.paused || s == Status.cancelled ? Theme.warn
+        : Theme.text;
 }

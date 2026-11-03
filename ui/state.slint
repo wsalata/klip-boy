@@ -32,6 +32,12 @@ export struct Heater {
     settable: bool,
 }
 
+// One point of the temperature graph; -1 for a heater the printer does not have.
+export struct TempSample {
+    nozzle: float,
+    bed: float,
+}
+
 export struct Fan {
     id: string,
     role: string,      // "part" or "" (generic, use `name`)
@@ -123,7 +129,7 @@ export struct BedMeshInfo {
 
 export struct MeshCell {
     value: string,
-    color: color,
+    level: float,   // -1 (lowest) .. 1 (highest), relative to the larger deviation
 }
 
 export struct MeshProfile {
@@ -183,6 +189,11 @@ export global Printer {
     // Nozzle and bed, shown in the top bar
     in property <[Heater]> top-heaters;
     in property <[Fan]> fans;
+    // Nozzle and bed over the last minutes (history.rs), oldest first, at most `temp-capacity`;
+    // the graph's top temperature
+    in property <[TempSample]> temp-history;
+    in property <int> temp-capacity: 120;
+    in property <float> temp-scale: 100;
     // Part cooling fan ("fan"), shown on the dashboard
     in property <bool> has-part-fan;
     in property <float> part-fan;
@@ -353,8 +364,10 @@ export global Settings {
     in-out property <string> url;
     in-out property <float> xy-speed;
     in-out property <float> z-speed;
-    // "auto", "en" or "pl"
+    // "auto" or one of config::LANGUAGES
     in-out property <string> language;
+    // One of config::PHOSPHORS: "green", "amber", "white", "blue"
+    in-out property <string> phosphor;
     // Screen saver idle time, 0 = off
     in-out property <int> screensaver-minutes;
     in property <[Preset]> presets;

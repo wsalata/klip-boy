@@ -1,5 +1,5 @@
 import { Theme } from "../theme.slint";
-import { Printer, Actions, Overlay, Heater, Fan, Strings, Screensaver } from "../state.slint";
+import { Printer, Actions, Overlay, Heater, Fan, Strings, Screensaver, TempSample } from "../state.slint";
 import { Btn, BtnKind, Card, Caption, Bar, FanSpeeds } from "../widgets.slint";
 import { ScrollView } from "std-widgets.slint";
 
@@ -71,6 +71,61 @@ component FanRow inherits VerticalLayout {
     if !root.fan.settable: Bar { value: root.fan.speed; }
 }
 
+// Nozzle and bed over the last minutes, as on an oscilloscope: newest on the right, one column
+// per sample, targets as faint lines, a grid line every 50°.
+component TempGraph inherits Rectangle {
+    property <[TempSample]> samples: Printer.temp-history;
+    property <float> top: Printer.temp-scale;
+    property <length> column: self.width / Printer.temp-capacity;
+    clip: true;
+
+    pure function level-y(t: float) -> length {
+        return (root.height - 2px) * (1 - clamp(t / root.top, 0, 1));
+    }
+
+    for g in floor(root.top / 50): Rectangle {
+        y: root.level-y((g + 1) * 50);
+        height: 1px;
+        background: Theme.border.transparentize(0.4);
+    }
+    Rectangle { y: root.height - 1px; height: 1px; background: Theme.border; }
+    Text {
+        x: 2px;
+        y: root.level-y(root.top - 50) + 2px;
+        text: round(root.top - 50) + "°";
+        color: Theme.text-dim;
+        font-size: 11px;
+    }
+
+    for h in Printer.top-heaters: Rectangle {
+        visible: h.target > 0;
+        y: root.level-y(h.target);
+        height: 1px;
+        background: Theme.hot.transparentize(0.45);
+    }
+
+    // Each column joins the previous sample to this one, so the line has no gaps
+    for s[i] in root.samples: Rectangle {
+        property <TempSample> prev: i > 0 ? root.samples[i - 1] : s;
+        x: root.width - (root.samples.length - i) * root.column;
+        width: root.column + 0.5px;
+        if s.bed >= 0: Rectangle {
+            property <length> a: root.level-y(parent.prev.bed >= 0 ? parent.prev.bed : s.bed);
+            property <length> b: root.level-y(s.bed);
+            y: min(self.a, self.b);
+            height: abs(self.a - self.b) + 2px;
+            background: Theme.text-dim;
+        }
+        if s.nozzle >= 0: Rectangle {
+            property <length> a: root.level-y(parent.prev.nozzle >= 0 ? parent.prev.nozzle : s.nozzle);
+            property <length> b: root.level-y(s.nozzle);
+            y: min(self.a, self.b);
+            height: abs(self.a - self.b) + 2px;
+            background: Theme.text;
+        }
+    }
+}
+
 // Three columns: heaters and sensors, fans, presets.
 export component TemperaturePage inherits Rectangle {
     HorizontalLayout {
@@ -79,11 +134,38 @@ export component TemperaturePage inherits Rectangle {
 
         Card {
             horizontal-stretch: 1;
-            ScrollView {
-                VerticalLayout {
-                    alignment: start;
-                    for h in Printer.heaters: HeaterRow { heater: h; }
-                    for s in Printer.sensors: HeaterRow { heater: s; }
+            VerticalLayout {
+                ScrollView {
+                    vertical-stretch: 1;
+                    VerticalLayout {
+                        alignment: start;
+                        for h in Printer.heaters: HeaterRow { heater: h; }
+                        for s in Printer.sensors: HeaterRow { heater: s; }
+                    }
+                }
+                if Printer.top-heaters.length > 0: VerticalLayout {
+                    vertical-stretch: 0;
+                    padding: 10px;
+                    padding-top: 6px;
+                    spacing: 4px;
+                    HorizontalLayout {
+                        spacing: 12px;
+                        for h in Printer.top-heaters: HorizontalLayout {
+                            spacing: 5px;
+                            horizontal-stretch: 0;
+                            VerticalLayout {
+                                alignment: center;
+                                Rectangle {
+                                    width: 10px;
+                                    height: 3px;
+                                    background: h.role == "bed" ? Theme.text-dim : Theme.text;
+                                }
+                            }
+                            Caption { text: Strings.heater-name(h); font-size: 12px; }
+                        }
+                        Caption { text: @tr("{} min", 5); font-size: 12px; horizontal-alignment: right; horizontal-stretch: 1; }
+                    }
+                    TempGraph { height: 110px; }
                 }
             }
         }

@@ -3,7 +3,7 @@
 
 use crate::config::{self, Config};
 use crate::moonraker::Command;
-use crate::{AppWindow, Messages, Preset, Printer, Settings, bridge};
+use crate::{AppWindow, Messages, Preset, Printer, Settings, Theme, bridge};
 use slint::{ComponentHandle, Model, ModelRc, VecModel};
 use std::cell::RefCell;
 use std::rc::Rc;
@@ -49,6 +49,7 @@ pub fn wire(ui: &AppWindow, cfg: Rc<RefCell<Config>>, tx: UnboundedSender<Comman
         let cfg = current.borrow();
         s.set_url(cfg.moonraker_url.as_str().into());
         s.set_language(cfg.language.as_str().into());
+        s.set_phosphor(cfg.phosphor.as_str().into());
         s.set_xy_speed(cfg.xy_speed);
         s.set_z_speed(cfg.z_speed);
         s.set_screensaver_minutes(cfg.screensaver_minutes as i32);
@@ -112,6 +113,7 @@ pub fn wire(ui: &AppWindow, cfg: Rc<RefCell<Config>>, tx: UnboundedSender<Comman
         let new = Config {
             moonraker_url: s.get_url().trim().to_string(),
             language: s.get_language().to_string(),
+            phosphor: s.get_phosphor().to_string(),
             xy_speed: s.get_xy_speed(),
             z_speed: s.get_z_speed(),
             screensaver_minutes: s.get_screensaver_minutes().max(0) as u32,
@@ -130,8 +132,10 @@ pub fn wire(ui: &AppWindow, cfg: Rc<RefCell<Config>>, tx: UnboundedSender<Comman
             return;
         }
 
-        // Apply: language, presets and address in the UI right away, the rest in the network thread
+        // Apply: language, colour, presets and address in the UI right away, the rest in the
+        // network thread
         apply_language(&new.language);
+        ui.global::<Theme>().set_phosphor(new.phosphor_index());
         let printer = ui.global::<Printer>();
         bridge::sync(&printer.get_presets(), presets_model(&new.presets));
         printer.set_moonraker_url(new.moonraker_url.as_str().into());

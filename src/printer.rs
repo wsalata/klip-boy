@@ -190,18 +190,6 @@ pub struct MeshData {
     pub profiles: Vec<MeshProfile>,
 }
 
-/// In the panel's phosphor colours: dim green below zero, bright green at zero, amber above;
-/// `t` is -1..1.
-fn mesh_color(t: f64) -> slint::Color {
-    const LOW: [f64; 3] = [12.0, 100.0, 58.0];
-    const MID: [f64; 3] = [15.0, 187.0, 107.0];
-    const HIGH: [f64; 3] = [255.0, 177.0, 61.0];
-    let t = t.clamp(-1.0, 1.0);
-    let (to, k) = if t < 0.0 { (LOW, -t) } else { (HIGH, t) };
-    let c = |i: usize| (MID[i] + (to[i] - MID[i]) * k).round() as u8;
-    slint::Color::from_rgb_u8(c(0), c(1), c(2))
-}
-
 /// Everything sent to the UI after each state update.
 pub struct Snapshot {
     pub conn: Conn,
@@ -415,7 +403,7 @@ impl PrinterModel {
             .iter()
             .rev()
             .flatten()
-            .map(|&v| MeshCell { value: format!("{v:+.3}").into(), color: mesh_color(v / scale) })
+            .map(|&v| MeshCell { value: format!("{v:+.3}").into(), level: (v / scale).clamp(-1.0, 1.0) as f32 })
             .collect();
 
         let mut profiles: Vec<MeshProfile> = self
@@ -453,7 +441,7 @@ impl PrinterModel {
             bed_screws: o.bed_screws,
             z_tilt: o.z_tilt,
             gantry: o.gantry,
-            tilt_applied: applied("z_tilt").or(applied("quad_gantry_level")).unwrap_or(false),
+            tilt_applied: applied("z_tilt").or_else(|| applied("quad_gantry_level")).unwrap_or(false),
             max_deviation: self
                 .f("/screws_tilt_adjust/max_deviation")
                 .map_or_else(String::new, |v| format!("{v:.3}"))
@@ -490,6 +478,12 @@ impl PrinterModel {
         screws
     }
 
+    /// "G28\n" when not all axes are homed, to put in front of a script that moves the toolhead.
+    fn home_first(&self) -> String {
+        let homed = self.s("/toolhead/homed_axes");
+        if ['x', 'y', 'z'].iter().all(|&a| homed.contains(a)) { String::new() } else { "G28\n".into() }
+    }
+
     /// Bed levelling, homing first if needed. `method`: "screws-tilt" (SCREWS_TILT_CALCULATE),
     /// "bed-screws" (BED_SCREWS_ADJUST, then ACCEPT/ADJUSTED/ABORT), "z-tilt" or "gantry".
     /// Z is homed again after Z_TILT_ADJUST and QUAD_GANTRY_LEVEL, which tilt the bed or gantry.
@@ -501,11 +495,7 @@ impl PrinterModel {
             "gantry" => "QUAD_GANTRY_LEVEL\nG28 Z",
             _ => return None,
         };
-        let mut script = String::new();
-        let homed = self.s("/toolhead/homed_axes");
-        if !(homed.contains('x') && homed.contains('y') && homed.contains('z')) {
-            script.push_str("G28\n");
-        }
+        let mut script = self.home_first();
         script.push_str(command);
         Some(script)
     }
@@ -560,11 +550,7 @@ impl PrinterModel {
     /// ("default" when empty) and waits for SAVE_CONFIG to keep it.
     pub fn bed_mesh_gcode(&self, profile: &str) -> String {
         let profile: String = profile.trim().chars().map(|c| if c.is_whitespace() { '_' } else { c }).collect();
-        let mut script = String::new();
-        let homed = self.s("/toolhead/homed_axes");
-        if !(homed.contains('x') && homed.contains('y') && homed.contains('z')) {
-            script.push_str("G28\n");
-        }
+        let mut script = self.home_first();
         script.push_str("BED_MESH_CALIBRATE");
         if !profile.is_empty() && profile != "default" {
             script.push_str(&format!(" PROFILE={profile}"));
@@ -581,11 +567,7 @@ impl PrinterModel {
             "endstop" => "Z_ENDSTOP_CALIBRATE",
             _ => return None,
         };
-        let mut script = String::new();
-        let homed = self.s("/toolhead/homed_axes");
-        if !(homed.contains('x') && homed.contains('y') && homed.contains('z')) {
-            script.push_str("G28\n");
-        }
+        let mut script = self.home_first();
         let limit = |end: &str, i: usize| self.f(&format!("/toolhead/axis_{end}/{i}"));
         let centre = |i: usize| Some((limit("minimum", i)? + limit("maximum", i)?) / 2.0);
         if let (Some(x), Some(y)) = (centre(0), centre(1)) {
@@ -802,7 +784,7 @@ mod tests {
         // Back row (last in the matrix) first
         let values: Vec<_> = mesh.cells.iter().map(|c| c.value.to_string()).collect();
         assert_eq!(values, ["+0.050", "+0.200", "-0.100", "+0.000"]);
-        assert_eq!(mesh.cells[1].color, mesh_color(1.0));
+        assert_eq!(mesh.cells[1].level, 1.0);
         let names: Vec<_> = mesh.profiles.iter().map(|p| (p.name.to_string(), p.active)).collect();
         assert_eq!(names, [("default".into(), false), ("pei".into(), true)]);
 
